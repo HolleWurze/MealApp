@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="app.mealapp2.Controllers.AdminScreenController" prefHeight="1080" prefWidth="1920">
+
+    <VBox spacing="10" alignment="TOP_LEFT" layoutY="200">
+
+        <HBox spacing="10">
+            <Button fx:id="chooseAppFolderButton" text="Choose App Folder" onAction="#chooseAppFolder"/>
+            <Label fx:id="appFolderPathLabel" text=""/>
+        </HBox>
+        <HBox spacing="10">
+            <Button fx:id="chooseServerFolderButton" text="Choose Server Folder" onAction="#chooseServerFolder"/>
+            <Label fx:id="serverFolderPathLabel" text=""/>
+        </HBox>
+    </VBox>
+
+    <GridPane layoutY="400">
+        <!-- Первая строка -->
+        <TextField fx:id="Catering1" GridPane.rowIndex="0" GridPane.columnIndex="0" />
+        <Button text="Choose Image 1" onAction="#chooseImage1" GridPane.rowIndex="0" GridPane.columnIndex="1" />
+        <Label fx:id="pathLabel1" GridPane.rowIndex="0" GridPane.columnIndex="4" />
+
+        <!-- Вторая строка -->
+        <TextField fx:id="Catering2" GridPane.rowIndex="1" GridPane.columnIndex="0" />
+        <Button text="Choose Image 2" onAction="#chooseImage2" GridPane.rowIndex="1" GridPane.columnIndex="1" />
+        <Label fx:id="pathLabel2" GridPane.rowIndex="1" GridPane.columnIndex="4" />
+
+        <!-- Третья строка -->
+        <TextField fx:id="Catering3" GridPane.rowIndex="2" GridPane.columnIndex="0" />
+        <Button text="Choose Image 3" onAction="#chooseImage3" GridPane.rowIndex="2" GridPane.columnIndex="1" />
+        <Label fx:id="pathLabel3" GridPane.rowIndex="2" GridPane.columnIndex="4" />
+        <Button fx:id="goToMainMenuButton" GridPane.rowIndex="3" GridPane.columnIndex="0" text="Back to Main Menu" onAction="#goToMainMenu"/>
+    </GridPane>
+
+</AnchorPane>
