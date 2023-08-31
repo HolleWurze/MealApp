@@ -9,25 +9,38 @@ import java.io.InputStream;
 import java.util.Properties;
 
 public class AdminManager {
-    private static final String CONFIG_FILE_PATH = "config.properties";
+    private static final String DEFAULT_CONFIG_FILE_PATH = "config.properties";
+    private static final String EXTERNAL_CONFIG_FILE_PATH = "C:\\MealApp\\config.properties";
     private Properties propertiesFolders;
-    private static InputStream inputStream = CateringDataStore.class.getClassLoader().getResourceAsStream("config.properties");
 
     public AdminManager() {
         propertiesFolders = new Properties();
-        try {
-            propertiesFolders.load(inputStream);
+
+        // Пытаемся загрузить из внешней папки
+        try (InputStream externalInputStream = new FileInputStream(EXTERNAL_CONFIG_FILE_PATH)) {
+            propertiesFolders.load(externalInputStream);
         } catch (IOException e) {
-            e.printStackTrace();
+            // Не удалось загрузить из внешней папки. Загрузим из classpath.
+            try (InputStream defaultInputStream = getClass().getClassLoader().getResourceAsStream(DEFAULT_CONFIG_FILE_PATH)) {
+                if (defaultInputStream != null) {
+                    propertiesFolders.load(defaultInputStream);
+                }
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
         }
 
-        if(!propertiesFolders.containsKey("appSelectedDirectory")) {
+        setDefaultPropertiesIfAbsent();
+        saveProperties();
+    }
+
+    private void setDefaultPropertiesIfAbsent() {
+        if (!propertiesFolders.containsKey("appSelectedDirectory")) {
             propertiesFolders.setProperty("appSelectedDirectory", "C:\\MealApp");
         }
-        if(!propertiesFolders.containsKey("serverSelectedDirectory")) {
+        if (!propertiesFolders.containsKey("serverSelectedDirectory")) {
             propertiesFolders.setProperty("serverSelectedDirectory", "\\\\192.168.10.10\\Priority_int\\MealApp");
         }
-        saveProperties();
     }
 
     public String getAppDirectory() {
@@ -40,7 +53,7 @@ public class AdminManager {
     }
 
     public String getServerDirectory() {
-        return propertiesFolders.getProperty("serverSelectedDirectory", "");  // Второй параметр - значение по умолчанию.
+        return propertiesFolders.getProperty("serverSelectedDirectory", "");
     }
 
     public void setServerDirectory(String path) {
@@ -51,7 +64,7 @@ public class AdminManager {
     private void saveProperties() {
         FileOutputStream out = null;
         try {
-            out = new FileOutputStream(CONFIG_FILE_PATH);
+            out = new FileOutputStream(EXTERNAL_CONFIG_FILE_PATH);
             propertiesFolders.store(out, null);
         } catch (IOException e) {
             e.printStackTrace();

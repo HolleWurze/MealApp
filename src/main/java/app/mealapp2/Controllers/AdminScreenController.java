@@ -1,5 +1,6 @@
 package app.mealapp2.Controllers;
 
+import app.mealapp2.Constants;
 import app.mealapp2.Managers.AdminManager;
 import app.mealapp2.Storage.CateringDataStore;
 import javafx.fxml.FXML;
@@ -21,6 +22,7 @@ public class AdminScreenController {
 
     private Properties propertiesFiles = new Properties();
     private Map<String, String> cateringImageMap = new HashMap<>();
+    private String propertiesFilePath;
     private String oldCatering1Value;
     private String oldCatering2Value;
     private String oldCatering3Value;
@@ -56,8 +58,10 @@ public class AdminScreenController {
         oldCatering3Value = Catering3.getText();
 
         AdminManager adminManager = new AdminManager();
-        String appPath = adminManager.getAppDirectory();
-        String serverPath = adminManager.getServerDirectory();
+        String appPath = Constants.APP_FOLDER_PATH;
+        String serverPath = Constants.SERVER_FOLDER_PATH;
+
+        propertiesFilePath = appPath + File.separator + "cateringFiles.properties";
 
         if (appPath != null && !appPath.isEmpty()) {
             appFolderPathLabel.setText(appPath);
@@ -68,7 +72,7 @@ public class AdminScreenController {
         }
 
         try {
-            InputStream inputStream = CateringDataStore.class.getClassLoader().getResourceAsStream("cateringFiles.properties");
+            InputStream inputStream = new FileInputStream(propertiesFilePath);
             propertiesFiles.load(inputStream);
 
             Catering1.setText(propertiesFiles.getProperty("catering1.name"));
@@ -177,7 +181,6 @@ public class AdminScreenController {
         return fileChooser.showOpenDialog(Catering1.getScene().getWindow());
     }
 
-
     private void saveProperties() {
         propertiesFiles.setProperty("catering1.name", Catering1.getText());
         propertiesFiles.setProperty("catering1.image", pathLabel1.getText());
@@ -189,7 +192,7 @@ public class AdminScreenController {
         propertiesFiles.setProperty("catering3.image", pathLabel3.getText());
 
         try {
-            propertiesFiles.store(new FileOutputStream("cateringFiles.properties"), null);
+            propertiesFiles.store(new FileOutputStream(propertiesFilePath), null);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -202,7 +205,7 @@ public class AdminScreenController {
     private void checkForChanges(String oldName, String newName, Label pathLabel) {
         if (!oldName.equals(newName)) {
             // Имя кейтеринга было изменено
-            Optional<ButtonType> result = showAlert("Catering change?","The name of the catering has been changed. Do you want to update the linked image?");
+            Optional<ButtonType> result = showAlert("Catering change?", "The name of the catering has been changed. Do you want to update the linked image?");
             if (result.isPresent() && result.get() == ButtonType.OK) {
                 // Пользователь хочет обновить изображение
                 File file = showImageFileChooser();
