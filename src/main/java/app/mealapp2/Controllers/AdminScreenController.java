@@ -26,7 +26,12 @@ public class AdminScreenController {
     private String oldCatering1Value;
     private String oldCatering2Value;
     private String oldCatering3Value;
+    private boolean deleteMode = false;
 
+    @FXML
+    private Button cleanButton, deleteButton;
+    @FXML
+    private CheckBox checkBoxCatering1, checkBoxCatering2, checkBoxCatering3;
     @FXML
     public TextField Catering1;
     @FXML
@@ -181,25 +186,57 @@ public class AdminScreenController {
         return fileChooser.showOpenDialog(Catering1.getScene().getWindow());
     }
 
-    private void saveProperties() {
-        propertiesFiles.setProperty("catering1.name", Catering1.getText());
-        propertiesFiles.setProperty("catering1.image", pathLabel1.getText());
+    @FXML
+    public void toggleDeleteMode() {
+        deleteMode = !deleteMode;
+        deleteButton.setVisible(deleteMode);
+        checkBoxCatering1.setVisible(deleteMode);
+        checkBoxCatering2.setVisible(deleteMode);
+        checkBoxCatering3.setVisible(deleteMode);
+    }
 
-        propertiesFiles.setProperty("catering2.name", Catering2.getText());
-        propertiesFiles.setProperty("catering2.image", pathLabel2.getText());
-
-        propertiesFiles.setProperty("catering3.name", Catering3.getText());
-        propertiesFiles.setProperty("catering3.image", pathLabel3.getText());
-
-        try {
-            propertiesFiles.store(new FileOutputStream(propertiesFilePath), null);
-        } catch (IOException e) {
-            e.printStackTrace();
+    @FXML
+    public void deleteSelected() {
+        if (checkBoxCatering1.isSelected()) {
+            propertiesFiles.remove("catering1.name");
+            propertiesFiles.remove("catering1.image");
+            Catering1.setText("");
+            pathLabel1.setText("");
+        }
+        if (checkBoxCatering2.isSelected()) {
+            propertiesFiles.remove("catering2.name");
+            propertiesFiles.remove("catering2.image");
+            Catering2.setText("");
+            pathLabel2.setText("");
+        }
+        if (checkBoxCatering3.isSelected()) {
+            propertiesFiles.remove("catering3.name");
+            propertiesFiles.remove("catering3.image");
+            Catering3.setText("");
+            pathLabel3.setText("");
         }
 
+        savePropertiesAfterDelete(); // сохраняем обновленные свойства
+
+        // Закрыть режим удаления и обновить UI
+        toggleDeleteMode();
+    }
+
+    private void savePropertiesAfterDelete() {
+        try (OutputStream output = new FileOutputStream(propertiesFilePath)) {
+            System.out.println("Saving to: " + propertiesFilePath);  // Отладочный вывод
+            propertiesFiles.store(output, null);
+        } catch (IOException io) {
+            io.printStackTrace();
+        }
+    }
+
+    private void saveProperties() {
         cateringImageMap.put(Catering1.getText(), pathLabel1.getText());
         cateringImageMap.put(Catering2.getText(), pathLabel2.getText());
         cateringImageMap.put(Catering3.getText(), pathLabel3.getText());
+
+        CateringDataStore.saveProperties();
     }
 
     private void checkForChanges(String oldName, String newName, Label pathLabel) {

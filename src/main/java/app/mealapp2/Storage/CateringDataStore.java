@@ -45,29 +45,25 @@ public class CateringDataStore {
     }
 
     public static void setImagePathForCatering(String cateringName, String imagePath) {
-        cateringImagesMap.put(cateringName, imagePath);
+        String adjustedPath = adjustPath(imagePath);
+        cateringImagesMap.put(cateringName, adjustedPath);
         saveProperties();
     }
 
-    private static void saveProperties() {
-        try {
-            properties.load(new FileInputStream(propertiesFilePath));
-        } catch (IOException e) {
-            e.printStackTrace();
+    private static String adjustPath(String inputPath) {
+        if (inputPath.startsWith("Y:\\")) {
+            return inputPath.replace("Y:\\", "\\\\192.168.10.10\\Priority_int\\");
         }
+        return inputPath;
+    }
 
+    public static void saveProperties() {
+        int index = 1;
         for (Map.Entry<String, String> entry : cateringImagesMap.entrySet()) {
-            String keyName = getKeyForValue(properties, entry.getValue());
-            if (keyName == null) {
-                continue;
-            }
-
-            String index = keyName.split("\\.")[0].replaceAll("[^0-9]", "");
-
             properties.setProperty("catering" + index + ".name", entry.getKey());
             properties.setProperty("catering" + index + ".image", entry.getValue());
+            index++;
         }
-
         try {
             properties.store(new FileOutputStream(propertiesFilePath), null); // Используем полный путь
         } catch (IOException e) {
