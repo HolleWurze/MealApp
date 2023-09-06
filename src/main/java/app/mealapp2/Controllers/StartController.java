@@ -51,7 +51,7 @@ public class StartController {
             orderController.setUser(user);
 
             Stage stage = (Stage) orderButton.getScene().getWindow();
-            stage.setMaximized(true);
+            //stage.setMaximized(true);
             stage.setScene(new Scene(root));
         } else {
             loadFXML("/Registration.fxml");
@@ -73,7 +73,7 @@ public class StartController {
         if (controller.isAuthenticated()) {
             Parent rootAdmin = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/AdminScreen.fxml")));
             Stage stageAdmin = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stageAdmin.setMaximized(true);
+            //stageAdmin.setMaximized(true);
             stageAdmin.setScene(new Scene(rootAdmin));
         }
     }
@@ -82,7 +82,7 @@ public class StartController {
     private void openOperatorScreen() throws IOException {
         Parent operatorRoot = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Operator.fxml")));
         Stage stage = (Stage) operatorButton.getScene().getWindow();
-        stage.setMaximized(true);
+        //stage.setMaximized(true);
         stage.setScene(new Scene(operatorRoot));
     }
 

@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <BorderPane xmlns:fx="http://javafx.com/fxml/1"
-            xmlns="http://javafx.com/javafx/11.0.1" fx:controller="app.mealapp2.Controllers.StartController" prefHeight="1080" prefWidth="1920">
+            xmlns="http://javafx.com/javafx/11.0.1" fx:controller="app.mealapp2.Controllers.StartController" prefHeight="1000" prefWidth="1680">
 
     <top>
         <HBox>

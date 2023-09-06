@@ -16,7 +16,7 @@ public class App extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
         primaryStage.setTitle("Meal Ordering App");
-        primaryStage.setMaximized(true);
+//        primaryStage.setMaximized(true);
         FXMLLoader startLoader = new FXMLLoader(getClass().getResource("/Start.fxml"));
         Parent root = startLoader.load();
         Scene scene = new Scene(root);

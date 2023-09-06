@@ -206,7 +206,14 @@ public class OrderController {
                         salads.setText(meal.getSalads());
                         addition.setText(meal.getAddition());
                         water.setText(meal.getWater());
-                        cibusCheckBox.setSelected(meal.isCibus());
+                        cibusCheckBox.setSelected(meal.getCibus());
+//                        cateringChoiceBox.setValue(meal.getCatering().get());
+//                        mainDish.setText(meal.getMainDish().get());
+//                        sideDish.setText(meal.getSideDish().get());
+//                        salads.setText(meal.getSalads().get());
+//                        addition.setText(meal.getAddition().get());
+//                        water.setText(meal.getWater().get());
+//                        cibusCheckBox.setSelected(meal.getCibus().get());
                     }
                 }
             }
@@ -348,7 +355,15 @@ public class OrderController {
                 salads.setText(mealFromFile.getSalads());
                 addition.setText(mealFromFile.getAddition());
                 water.setText(mealFromFile.getWater());
-                cibusCheckBox.setSelected(mealFromFile.isCibus());
+                cibusCheckBox.setSelected(mealFromFile.getCibus());
+
+//                cateringChoiceBox.setValue(mealFromFile.getCatering().get());
+//                mainDish.setText(mealFromFile.getMainDish().get());
+//                sideDish.setText(mealFromFile.getSideDish().get());
+//                salads.setText(mealFromFile.getSalads().get());
+//                addition.setText(mealFromFile.getAddition().get());
+//                water.setText(mealFromFile.getWater().get());
+//                cibusCheckBox.setSelected(mealFromFile.getCibus().get());
 
                 confirmChangesButton.setVisible(true);
             } else {
@@ -424,8 +439,16 @@ public class OrderController {
         saladsColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getMeal().getSalads()));
         additionColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getMeal().getAddition()));
         waterColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getMeal().getWater()));
-        cibusColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getMeal().isCibus() ? "YES" : "NO"));
-//        StyleUtil.styleExcelTableView(favoritesTableView);
+        cibusColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getMeal().getCibus() ? "YES" : "NO"));
+
+//        cateringColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getMeal().getCatering().get()));
+//        mainDishColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getMeal().getMainDish().get()));
+//        sideDishColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getMeal().getSideDish().get()));
+//        saladsColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getMeal().getSalads().get()));
+//        waterColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getMeal().getWater().get()));
+//        additionColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getMeal().getAddition().get()));
+//        cibusColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getMeal().getCibus().get() ? "YES" : "NO"));
+
         int numberOfColumns = 7;
         cateringColumn.prefWidthProperty().bind(favoritesTableView.widthProperty().divide(numberOfColumns));
         mainDishColumn.prefWidthProperty().bind(favoritesTableView.widthProperty().divide(numberOfColumns));

@@ -57,6 +57,8 @@ public class OperatorController {
     private Button goToMainMenuButton;
     @FXML
     private Button checkUserOrderPerMonth;
+    @FXML
+    private Button ordersForGuests;
 
     public OperatorController() {
         operatorManager = new OperatorManager();
@@ -108,11 +110,35 @@ public class OperatorController {
     }
 
     @FXML
+    public void makeOrdersForGuests() {
+        try {
+            // Загрузка FXML файла
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/GuestsOrders.fxml"));
+            Parent root = fxmlLoader.load();
+
+            // Создание новой сцены
+            Scene scene = new Scene(root, 1000, 600);
+
+            // Создание нового окна и установка сцены
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.setTitle("Make Orders for Guests");
+
+            // Показать новое окно
+            stage.show();
+        } catch (Exception e) {
+            // Обработка исключений
+            e.printStackTrace();
+        }
+    }
+
+
+    @FXML
     private void goToMainMenu() throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/Start.fxml"));
         Scene scene = new Scene(root);
         Stage stage = (Stage) goToMainMenuButton.getScene().getWindow();
-        stage.setMaximized(true);
+        //stage.setMaximized(true);
         stage.setScene(scene);
         stage.show();
     }
@@ -155,7 +181,14 @@ public class OperatorController {
             createCell(row, 4, meal.getSalads());
             createCell(row, 6, meal.getWater());
             createCell(row, 5, meal.getAddition());
-            createCell(row, 7, meal.isCibus() ? "YES" : "NO");
+            createCell(row, 7, meal.getCibus() ? "YES" : "NO");
+//            createCell(row, 1, meal.getCatering().get());
+//            createCell(row, 2, meal.getMainDish().get());
+//            createCell(row, 3, meal.getSideDish().get());
+//            createCell(row, 4, meal.getSalads().get());
+//            createCell(row, 6, meal.getWater().get());
+//            createCell(row, 5, meal.getAddition().get());
+//            createCell(row, 7, meal.getCibus().get() ? "YES" : "NO");
         }
         //Создание файла excel по заданному пути
         try (FileOutputStream outputStream = new FileOutputStream(Constants.SERVER_FOLDER_PATH + "\\Reports" + "/orders_" + LocalDate.now() + ".xlsx")) {
@@ -188,7 +221,16 @@ public class OperatorController {
         saladColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getMeal().getSalads()));
         waterColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getMeal().getWater()));
         additionColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getMeal().getAddition()));
-        cibusColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getMeal().isCibus() ? "YES" : "NO"));
+        cibusColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getMeal().getCibus() ? "YES" : "NO"));
+
+//        cateringColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getMeal().getCatering().get()));
+//        nameColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getName() + " " + data.getValue().getSurname()));
+//        mainDishColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getMeal().getMainDish().get()));
+//        sideDishColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getMeal().getSideDish().get()));
+//        saladColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getMeal().getSalads().get()));
+//        waterColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getMeal().getWater().get()));
+//        additionColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getMeal().getAddition().get()));
+//        cibusColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getMeal().getCibus().get() ? "YES" : "NO"));
 
         int numberOfColumns = 8;
         cateringColumn.prefWidthProperty().bind(ordersTable.widthProperty().divide(numberOfColumns));

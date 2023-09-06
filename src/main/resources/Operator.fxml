@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <BorderPane fx:controller="app.mealapp2.Controllers.OperatorController"
-            xmlns:fx="http://javafx.com/fxml" prefHeight="1080" prefWidth="1920">
+            xmlns:fx="http://javafx.com/fxml" prefHeight="1000" prefWidth="1680">
 
     <!-- Top section -->
     <top>
@@ -14,7 +14,7 @@
             <Button fx:id="loadButton" onAction="#handleLoadButtonAction" text="Load Orders"/>
             <Button fx:id="createExcelButton" onAction="#handleCreateExcelButtonAction" text="Create Excel"/>
             <Button fx:id="checkUserOrderPerMonth" onAction="#checkUserOrderPerMonth" text="Month User orders"/>
-
+            <Button fx:id="ordersForGuests" onAction="#makeOrdersForGuests" text="Make orders for Guests"/>
 
             <Region HBox.hgrow="ALWAYS"/>
             <Button fx:id="goToMainMenuButton" text="Back to Main Menu" onAction="#goToMainMenu"/>
