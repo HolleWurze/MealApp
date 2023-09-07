@@ -129,16 +129,16 @@ public class OrderController {
 
     @FXML
     public void addToFavorites() {
-        // Получить значения из полей ввода
         String cateringValue = (cateringChoiceBox.getValue() == null) ? "" : cateringChoiceBox.getValue();
         String mainDishValue = mainDish.getText().trim();
         String sideDishValue = sideDish.getText().trim();
         String saladsValue = salads.getText().trim();
         String additionValue = addition.getText().trim();
         String waterValue = water.getText().trim();
+        boolean cibusValue = cibusCheckBox.isSelected();
 
         boolean noCatering = cateringValue.isEmpty();
-        boolean noDish = mainDishValue.isEmpty() && sideDishValue.isEmpty() && saladsValue.isEmpty() && additionValue.isEmpty() && waterValue.isEmpty();
+        boolean noDish = mainDishValue.isEmpty() && sideDishValue.isEmpty() && saladsValue.isEmpty() && additionValue.isEmpty() && waterValue.isEmpty() && cibusValue;
 
         if (noCatering && noDish) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -167,7 +167,7 @@ public class OrderController {
             return;
         }
 
-        Meal meal = new Meal(cateringValue, mainDishValue, sideDishValue, saladsValue, additionValue, waterValue, cibusCheckBox.isSelected());
+        Meal meal = new Meal(cateringValue, mainDishValue, sideDishValue, saladsValue, waterValue, additionValue, cibusValue); //cibusCheckBox.isSelected()
 
         if (favorites.contains(meal)) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -180,25 +180,22 @@ public class OrderController {
 
         String filePath = Constants.APP_FOLDER_PATH + "\\" + user.getName() + "_" + user.getSurname() + "_favorites.txt";
 
-        // Добавить объект Meal в список избранных
         favorites.add(meal);
         OrderManager.saveFavoritesToFile(favorites, filePath);
     }
 
     @FXML
     public void showFavorites() throws IOException {
-        // Загрузка избранных заказов
         loadFavorites();
 
-        // Установка обработчика для добавления в избранное
         favoritesTableView.setOnMouseClicked(event -> {
-            if (event.getClickCount() == 2) { // Двойной клик
+            if (event.getClickCount() == 2) {
                 Order selectedOrder = favoritesTableView.getSelectionModel().getSelectedItem();
                 if (selectedOrder != null) {
                     Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Do you want to order this favorite order?", ButtonType.YES, ButtonType.NO);
                     Optional<ButtonType> result = alert.showAndWait();
                     if (result.isPresent() && result.get() == ButtonType.YES) {
-                        // Заполнение полей заказа
+
                         Meal meal = selectedOrder.getMeal();
                         cateringChoiceBox.setValue(meal.getCatering());
                         mainDish.setText(meal.getMainDish());
@@ -207,13 +204,6 @@ public class OrderController {
                         addition.setText(meal.getAddition());
                         water.setText(meal.getWater());
                         cibusCheckBox.setSelected(meal.getCibus());
-//                        cateringChoiceBox.setValue(meal.getCatering().get());
-//                        mainDish.setText(meal.getMainDish().get());
-//                        sideDish.setText(meal.getSideDish().get());
-//                        salads.setText(meal.getSalads().get());
-//                        addition.setText(meal.getAddition().get());
-//                        water.setText(meal.getWater().get());
-//                        cibusCheckBox.setSelected(meal.getCibus().get());
                     }
                 }
             }
@@ -222,12 +212,11 @@ public class OrderController {
 
     @FXML
     public void deleteFavorites() throws IOException {
-        // Загрузка избранных заказов
         loadFavorites();
         favoriteOrders.clear();
-        // Установка обработчика для удаления
+
         favoritesTableView.setOnMouseClicked(event -> {
-            if (event.getClickCount() == 2) { // Двойной клик
+            if (event.getClickCount() == 2) {
                 Order selectedOrder = favoritesTableView.getSelectionModel().getSelectedItem();
                 if (selectedOrder != null) {
                     Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to delete this favorite order?", ButtonType.YES, ButtonType.NO);
@@ -289,7 +278,6 @@ public class OrderController {
 
     @FXML
     public void placeOrder() {
-        // Получить значения из полей ввода
         String cateringValue = cateringChoiceBox.getValue();
         String mainDishValue = mainDish.getText().trim();
         String sideDishValue = sideDish.getText().trim();
@@ -309,13 +297,10 @@ public class OrderController {
             return;
         }
 
-        // Создать объект Meal на основе полученных значений
         Meal cateringMeal = new Meal(cateringValue, mainDishValue, sideDishValue, saladsValue, additionValue, waterValue, cibusCheckBox.isSelected());
 
-        // Создать объект Order
         Order order = new Order(user.getName(), user.getSurname(), cateringMeal);
 
-        // Сохранить заказ в файл
         try {
             String message = orderManager.saveOrderToFile(order);
             infoLabel.setText(message);
@@ -337,18 +322,15 @@ public class OrderController {
         if (matchingFiles != null && matchingFiles.length > 0) {
             Path orderFilePath = matchingFiles[0].toPath();
 
-            // Извлекаем имя кейтеринга из имени файла
             String[] parts = orderFilePath.getFileName().toString().split("_");
             String cateringNameFromFile = parts.length > 2 ? parts[1] : "";
 
-            // Считываем заказ из файла
             Order orderFromFile = orderManager.getOrderFromFile(orderFilePath);
 
             if (orderFromFile != null) {
-                // Получаем объект Meal из заказа
+
                 Meal mealFromFile = orderFromFile.getMeal();
 
-                // Заполняем поля интерфейса информацией из объекта Meal
                 cateringChoiceBox.setValue(mealFromFile.getCatering());
                 mainDish.setText(mealFromFile.getMainDish());
                 sideDish.setText(mealFromFile.getSideDish());
@@ -356,14 +338,6 @@ public class OrderController {
                 addition.setText(mealFromFile.getAddition());
                 water.setText(mealFromFile.getWater());
                 cibusCheckBox.setSelected(mealFromFile.getCibus());
-
-//                cateringChoiceBox.setValue(mealFromFile.getCatering().get());
-//                mainDish.setText(mealFromFile.getMainDish().get());
-//                sideDish.setText(mealFromFile.getSideDish().get());
-//                salads.setText(mealFromFile.getSalads().get());
-//                addition.setText(mealFromFile.getAddition().get());
-//                water.setText(mealFromFile.getWater().get());
-//                cibusCheckBox.setSelected(mealFromFile.getCibus().get());
 
                 confirmChangesButton.setVisible(true);
             } else {
@@ -440,14 +414,6 @@ public class OrderController {
         additionColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getMeal().getAddition()));
         waterColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getMeal().getWater()));
         cibusColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getMeal().getCibus() ? "YES" : "NO"));
-
-//        cateringColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getMeal().getCatering().get()));
-//        mainDishColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getMeal().getMainDish().get()));
-//        sideDishColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getMeal().getSideDish().get()));
-//        saladsColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getMeal().getSalads().get()));
-//        waterColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getMeal().getWater().get()));
-//        additionColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getMeal().getAddition().get()));
-//        cibusColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getMeal().getCibus().get() ? "YES" : "NO"));
 
         int numberOfColumns = 7;
         cateringColumn.prefWidthProperty().bind(favoritesTableView.widthProperty().divide(numberOfColumns));

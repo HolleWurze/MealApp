@@ -15,7 +15,7 @@
             <Button fx:id="createExcelButton" onAction="#handleCreateExcelButtonAction" text="Create Excel"/>
             <Button fx:id="checkUserOrderPerMonth" onAction="#checkUserOrderPerMonth" text="Month User orders"/>
             <Button fx:id="ordersForGuests" onAction="#makeOrdersForGuests" text="Make orders for Guests"/>
-
+            <Label fx:id="quantityOrdersToday" visible="false"/>
             <Region HBox.hgrow="ALWAYS"/>
             <Button fx:id="goToMainMenuButton" text="Back to Main Menu" onAction="#goToMainMenu"/>
         </HBox>

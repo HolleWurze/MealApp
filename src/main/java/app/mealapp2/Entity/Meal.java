@@ -59,18 +59,18 @@ public class Meal {
             return false;
         }
         Meal meal = (Meal) obj;
-        return Objects.equals(catering, meal.catering) &&
-                Objects.equals(mainDish, meal.mainDish) &&
-                Objects.equals(sideDish, meal.sideDish) &&
-                Objects.equals(salads, meal.salads) &&
-                Objects.equals(water, meal.water) &&
-                Objects.equals(addition, meal.addition) &&
-                cibus == meal.cibus;
+        return Objects.equals(catering.get(), meal.catering.get()) &&
+                Objects.equals(mainDish.get(), meal.mainDish.get()) &&
+                Objects.equals(sideDish.get(), meal.sideDish.get()) &&
+                Objects.equals(salads.get(), meal.salads.get()) &&
+                Objects.equals(water.get(), meal.water.get()) &&
+                Objects.equals(addition.get(), meal.addition.get()) &&
+                cibus.get() == meal.cibus.get();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(catering, mainDish, sideDish, salads, water, addition, cibus);
+        return Objects.hash(catering.get(), mainDish.get(), sideDish.get(), salads.get(), water.get(), addition.get(), cibus.get());
     }
 
     public String getCatering() {

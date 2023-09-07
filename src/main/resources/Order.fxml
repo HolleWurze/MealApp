@@ -42,8 +42,8 @@
                     <TableColumn fx:id="mainDishColumn" text="עיקריות"/>
                     <TableColumn fx:id="sideDishColumn" text="תוספות"/>
                     <TableColumn fx:id="saladsColumn" text="סלטים"/>
+                    <TableColumn fx:id="waterColumn" text="שתיה"/>
                     <TableColumn fx:id="additionColumn" text="הערות"/>
-                    <TableColumn fx:id="waterColumn" text="שטייה"/>
                     <TableColumn fx:id="cibusColumn" text="סיבוס"/>
                 </columns>
             </TableView>

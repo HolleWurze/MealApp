@@ -249,27 +249,17 @@ public class GuestsOrdersController implements Initializable {
 
     @FXML
     public void deleteGuestsOrdersFile() {
-        String filePath = Constants.SERVER_FOLDER_PATH + "\\Orders\\" + LocalDate.now() + "_Guests_order.txt";
-        File file = new File(filePath);
-        if (file.exists()) {
-            if (file.delete()) {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Success");
-                alert.setHeaderText(null);
-                alert.setContentText("File was deleted successfully");
-                alert.showAndWait();
-            } else {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText(null);
-                alert.setContentText("Failed to delete the file");
-                alert.showAndWait();
-            }
+        if (deleteOldOrderFiles()) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Success");
+            alert.setHeaderText(null);
+            alert.setContentText("File(s) was deleted successfully");
+            alert.showAndWait();
         } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText(null);
-            alert.setContentText("Guest order file not found!");
+            alert.setContentText("Failed to delete the file or file not found");
             alert.showAndWait();
         }
     }
@@ -315,19 +305,23 @@ public class GuestsOrdersController implements Initializable {
         }
     }
 
-    public void deleteOldOrderFiles() {
+    public boolean deleteOldOrderFiles() {
         File folder = new File(Constants.SERVER_FOLDER_PATH + "\\Orders");
         File[] listOfFiles = folder.listFiles();
+        boolean fileDeleted = false;
 
         if (listOfFiles != null) {
             for (File file : listOfFiles) {
                 if (file.isFile()) {
                     String fileName = file.getName();
                     if (fileName.matches(LocalDate.now() + "_Guests_order_" + "_.*_" + ".txt")) {
-                        file.delete();
+                        if (file.delete()) {
+                            fileDeleted = true;
+                        }
                     }
                 }
             }
         }
+        return fileDeleted;
     }
 }
