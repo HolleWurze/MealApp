@@ -165,7 +165,6 @@ public class GuestsOrdersController implements Initializable {
         }
     }
 
-
     @FXML
     private void addRow() {
         Meal newMeal = new Meal("", "", "", "", "", "", false);
@@ -314,7 +313,7 @@ public class GuestsOrdersController implements Initializable {
             for (File file : listOfFiles) {
                 if (file.isFile()) {
                     String fileName = file.getName();
-                    if (fileName.matches(LocalDate.now() + "_Guests_order_" + "_.*_" + ".txt")) {
+                    if (fileName.matches(LocalDate.now() + "_Guests_order_\\d+\\.txt")) {
                         if (file.delete()) {
                             fileDeleted = true;
                         }

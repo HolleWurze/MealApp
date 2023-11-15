@@ -35,7 +35,7 @@ public class Meal {
                 mainDish.get() + "," +
                 sideDish.get() + "," +
                 salads.get() + "," +
-                water.get() + ", " +
+                water.get() + "," +
                 addition.get() + "," +
                 (cibus.get() ? "YES" : "NO");
     }
@@ -46,7 +46,7 @@ public class Meal {
                 mainDish.get() + "," +
                 sideDish.get() + "," +
                 salads.get() + "," +
-                water.get() + ", " +
+                water.get() + "," +
                 addition.get() + "," +
                 (cibus.get() ? "YES" : "NO");
     }

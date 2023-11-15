@@ -138,7 +138,7 @@ public class OrderController {
         boolean cibusValue = cibusCheckBox.isSelected();
 
         boolean noCatering = cateringValue.isEmpty();
-        boolean noDish = mainDishValue.isEmpty() && sideDishValue.isEmpty() && saladsValue.isEmpty() && additionValue.isEmpty() && waterValue.isEmpty() && cibusValue;
+        boolean noDish = mainDishValue.isEmpty() && sideDishValue.isEmpty() && saladsValue.isEmpty() && additionValue.isEmpty() && waterValue.isEmpty(); //&& cibusValue
 
         if (noCatering && noDish) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -247,7 +247,11 @@ public class OrderController {
     private void loadFavorites() {
 
         if (favorites.isEmpty()) {
-            System.out.println("No orders to display in table.");
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Info");
+            alert.setHeaderText("No Favorite");
+            alert.setContentText("You don't have any favorites orders yet, if you want to add your first order, enter it and then click the \"Add to Favorites\" button");
+            alert.showAndWait();
             return;
         }
 
@@ -285,10 +289,10 @@ public class OrderController {
         String additionValue = addition.getText().trim();
         String waterValue = water.getText().trim();
 
-        boolean isCateringValueEmpty = (cateringValue == null || cateringValue.isEmpty());
+        //boolean isCateringValueEmpty = (cateringValue == null || cateringValue.isEmpty());
 
-        if (isCateringValueEmpty && mainDishValue.isEmpty() && sideDishValue.isEmpty()
-                && saladsValue.isEmpty() && additionValue.isEmpty() && waterValue.isEmpty()) {
+        if (mainDishValue.isEmpty() && sideDishValue.isEmpty()
+                && saladsValue.isEmpty() && additionValue.isEmpty() && waterValue.isEmpty()) { //isCateringValueEmpty &&
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Warning");
             alert.setHeaderText("Empty Input");
