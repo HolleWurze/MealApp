@@ -13,10 +13,11 @@ public class StyleUtil {
 
     public static void stylePlaceOrderButton(Button button, String buttonText) {
         button.setStyle(
-                "-fx-background-color: #0077bb; " + // Темно-синий цвет для состояния "по умолчанию"
+                "-fx-background-color: #229342; " + // Темно-синий цвет для состояния "по умолчанию"
                         "-fx-border: none; " +
                         "-fx-text-fill: #FFFFFF; " +
                         "-fx-font-size: 14px; " +
+                        "-fx-font-weight: bold; " +
                         "-fx-padding: 7px; " +
                         "-fx-min-width: 150px; " +
                         "-fx-border-radius: 2px; " +
@@ -24,10 +25,11 @@ public class StyleUtil {
         );
 
         button.setOnMouseEntered(e -> button.setStyle(
-                "-fx-background-color: #b9dff1; " + // Цвет фона при наведении
+                "-fx-background-color: #33df64; " + // Цвет фона при наведении
                         "-fx-border: none; " +
                         "-fx-text-fill: #FFFFFF; " +
                         "-fx-font-size: 14px; " +
+                        "-fx-font-weight: bold; " +
                         "-fx-padding: 7px; " +
                         "-fx-min-width: 150px; " +
                         "-fx-border-radius: 2px; " +
@@ -35,10 +37,11 @@ public class StyleUtil {
         ));
 
         button.setOnMouseExited(e -> button.setStyle(
-                "-fx-background-color: #0077bb; " + // Темно-синий цвет для состояния "по умолчанию"
+                "-fx-background-color: #229342; " + // Темно-синий цвет для состояния "по умолчанию"
                         "-fx-border: none; " +
                         "-fx-text-fill: #FFFFFF; " +
                         "-fx-font-size: 14px; " +
+                        "-fx-font-weight: bold; " +
                         "-fx-padding: 7px; " +
                         "-fx-min-width: 150px; " +
                         "-fx-border-radius: 2px; " +
@@ -80,6 +83,7 @@ public class StyleUtil {
                         "-fx-border: none; " +
                         "-fx-text-fill: #FFFFFF; " +
                         "-fx-font-size: 14px; " +
+                        "-fx-font-weight: bold; " +
                         "-fx-padding: 7px; " +
                         "-fx-min-width: 150px; " +
                         "-fx-border-radius: 2px; " +
@@ -91,6 +95,7 @@ public class StyleUtil {
                         "-fx-border: none; " +
                         "-fx-text-fill: #FFFFFF; " +
                         "-fx-font-size: 14px; " +
+                        "-fx-font-weight: bold; " +
                         "-fx-padding: 7px; " +
                         "-fx-min-width: 150px; " +
                         "-fx-border-radius: 2px; " +
@@ -102,6 +107,7 @@ public class StyleUtil {
                         "-fx-border: none; " +
                         "-fx-text-fill: #FFFFFF; " +
                         "-fx-font-size: 14px; " +
+                        "-fx-font-weight: bold; " +
                         "-fx-padding: 7px; " +
                         "-fx-min-width: 150px; " +
                         "-fx-border-radius: 2px; " +

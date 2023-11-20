@@ -1,5 +1,6 @@
 package app.mealapp2.Entity;
 
+import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -28,6 +29,12 @@ public class Meal {
         this.water = new SimpleStringProperty(water);
         this.addition = new SimpleStringProperty(addition);
         this.cibus = new SimpleBooleanProperty(cibus);
+    }
+
+    public boolean isEmpty() {
+        boolean mealIsEmpty;
+        mealIsEmpty = mainDish.get().isEmpty() && sideDish.get().isEmpty() && salads.get().isEmpty() && water.get().isEmpty() && addition.get().isEmpty();
+        return mealIsEmpty;
     }
 
     public String toCsvString() {

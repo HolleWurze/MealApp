@@ -71,7 +71,7 @@ public class OperatorManager {
                     continue;
                 }
 
-                String[] mealData = splitData[1].split(",");
+                String[] mealData = splitData[1].split("#");
                 if (mealData.length < 7) {
                     continue;
                 }

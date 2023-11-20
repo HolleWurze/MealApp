@@ -107,60 +107,52 @@ public class GuestsOrdersController implements Initializable {
     @FXML
     public void saveOrdersToFile() {
         deleteOldOrderFiles();
+
+        int quantityOfOrders = 0;
         try {
-            int quantityOfOrders = Integer.parseInt(quantity.getText());
-            int totalOrdersInTable = mealTable.getItems().size();
-            int totalOrders = quantityOfOrders + totalOrdersInTable;
-
-            String filePath = Constants.SERVER_FOLDER_PATH + "\\Orders\\" + LocalDate.now() + "_Guests_order_" + totalOrders + ".txt";
-
-            File file = new File(filePath);
-            if (file.exists()) {
-                file.delete();
+            if (!quantity.getText().trim().isEmpty()) {
+                quantityOfOrders = Integer.parseInt(quantity.getText());
             }
-
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
-
-                String cateringValue = catering.getText().trim();
-                String mainDishValue = mainDish.getText().trim();
-                String sideDishValue = sideDish.getText().trim();
-                String saladsValue = salads.getText().trim();
-                String waterValue = water.getText().trim();
-                String commentValue = comment.getText().trim();
-
-                Meal mealFromLeft = new Meal(cateringValue, mainDishValue, sideDishValue, saladsValue, waterValue, commentValue, cibusCheckBox.isSelected());
-
-                String duplicateOrderString = "D|" + mealFromLeft;
-
-                for (int i = 0; i < quantityOfOrders; i++) {
-                    writer.write(duplicateOrderString);
-                    writer.newLine();
-                }
-
-                for (Meal rightMeal : mealTable.getItems()) {
-                    String individualOrderString = "I|" + rightMeal.toString();
-                    writer.write(individualOrderString);
-                    writer.newLine();
-                }
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Success");
-                alert.setHeaderText(null);
-                alert.setContentText("Successfully saved guest orders!");
-                alert.showAndWait();
-
-            } catch (IOException e) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText(null);
-                alert.setContentText("Error while saving to file: " + e.getMessage());
-                alert.showAndWait();
-            }
-
         } catch (NumberFormatException e) {
+            quantityOfOrders = 0;
+        }
+
+        mealTable.getItems().removeIf(Meal::isEmpty);
+
+        int totalOrdersInTable = mealTable.getItems().size();
+        int totalOrders = quantityOfOrders + totalOrdersInTable;
+
+        if (totalOrders <= 0) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("No Orders");
+            alert.setHeaderText(null);
+            alert.setContentText("There are no orders to save.");
+            alert.showAndWait();
+            return;
+        }
+
+        String filePath = Constants.SERVER_FOLDER_PATH + "\\Orders\\" + LocalDate.now() + "_Guests_order_" + totalOrders + ".txt";
+        File file = new File(filePath);
+        if (file.exists()) {
+            file.delete();
+        }
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
+            for (Meal meal : mealTable.getItems()) {
+                String orderString = "I|" + meal.toString();
+                writer.write(orderString);
+                writer.newLine();
+            }
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Success");
+            alert.setHeaderText(null);
+            alert.setContentText("Successfully saved guest orders!");
+            alert.showAndWait();
+        } catch (IOException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText(null);
-            alert.setContentText("Error in quantity: " + e.getMessage());
+            alert.setContentText("Error while saving to file: " + e.getMessage());
             alert.showAndWait();
         }
     }

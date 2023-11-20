@@ -155,7 +155,7 @@ public class OrderManager {
 
         String line;
         while ((line = reader.readLine()) != null) {
-            String[] mealData = line.split(",");
+            String[] mealData = line.split("#");
 
             String catering = mealData.length > 0 ? mealData[0].trim() : "";
             String mainDish = mealData.length > 1 ? mealData[1].trim() : "";

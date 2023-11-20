@@ -195,7 +195,6 @@ public class OrderController {
                     Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Do you want to order this favorite order?", ButtonType.YES, ButtonType.NO);
                     Optional<ButtonType> result = alert.showAndWait();
                     if (result.isPresent() && result.get() == ButtonType.YES) {
-
                         Meal meal = selectedOrder.getMeal();
                         cateringChoiceBox.setValue(meal.getCatering());
                         mainDish.setText(meal.getMainDish());
@@ -204,6 +203,12 @@ public class OrderController {
                         addition.setText(meal.getAddition());
                         water.setText(meal.getWater());
                         cibusCheckBox.setSelected(meal.getCibus());
+
+                        Alert alertConfirm = new Alert(Alert.AlertType.INFORMATION);
+                        alertConfirm.setTitle("Success");
+                        alertConfirm.setHeaderText("Your favorite has been upload");
+                        alertConfirm.setContentText("Now all you have to do is - click the \"Place Order\" button!");
+                        alertConfirm.showAndWait();
                     }
                 }
             }
@@ -301,7 +306,7 @@ public class OrderController {
             return;
         }
 
-        Meal cateringMeal = new Meal(cateringValue, mainDishValue, sideDishValue, saladsValue, additionValue, waterValue, cibusCheckBox.isSelected());
+        Meal cateringMeal = new Meal(cateringValue, mainDishValue, sideDishValue, saladsValue, waterValue, additionValue, cibusCheckBox.isSelected());
 
         Order order = new Order(user.getName(), user.getSurname(), cateringMeal);
 
