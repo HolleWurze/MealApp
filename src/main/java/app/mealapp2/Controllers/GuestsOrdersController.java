@@ -207,7 +207,7 @@ public class GuestsOrdersController implements Initializable {
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                String[] parts = line.substring(2).split(",");
+                String[] parts = line.substring(2).split("#");
 
                 if (line.startsWith("D|")) {
                     duplicateOrderCount++;

@@ -364,12 +364,12 @@ public class OrderController {
         try (BufferedWriter writer = Files.newBufferedWriter(orderFilePath)) {
             writer.write(user.getName() + "," + user.getSurname());
             writer.newLine();
-            writer.write(cateringChoiceBox.getValue() + ","
-                    + mainDish.getText() + ","
-                    + sideDish.getText() + ","
-                    + salads.getText() + ","
-                    + addition.getText() + ","
-                    + water.getText() + ","
+            writer.write(cateringChoiceBox.getValue() + "#"
+                    + mainDish.getText() + "#"
+                    + sideDish.getText() + "#"
+                    + salads.getText() + "#"
+                    + addition.getText() + "#"
+                    + water.getText() + "#"
                     + (cibusCheckBox.isSelected() ? "YES" : "NO"));
 
             confirmChangesButton.setVisible(false);

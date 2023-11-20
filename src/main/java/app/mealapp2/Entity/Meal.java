@@ -31,23 +31,23 @@ public class Meal {
     }
 
     public String toCsvString() {
-        return catering.get() + "," +
-                mainDish.get() + "," +
-                sideDish.get() + "," +
-                salads.get() + "," +
-                water.get() + "," +
-                addition.get() + "," +
+        return catering.get() + "#" +
+                mainDish.get() + "#" +
+                sideDish.get() + "#" +
+                salads.get() + "#" +
+                water.get() + "#" +
+                addition.get() + "#" +
                 (cibus.get() ? "YES" : "NO");
     }
 
     @Override
     public String toString() {
-        return catering.get() + "," +
-                mainDish.get() + "," +
-                sideDish.get() + "," +
-                salads.get() + "," +
-                water.get() + "," +
-                addition.get() + "," +
+        return catering.get() + "#" +
+                mainDish.get() + "#" +
+                sideDish.get() + "#" +
+                salads.get() + "#" +
+                water.get() + "#" +
+                addition.get() + "#" +
                 (cibus.get() ? "YES" : "NO");
     }
 

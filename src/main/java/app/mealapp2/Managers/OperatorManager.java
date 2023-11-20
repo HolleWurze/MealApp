@@ -49,7 +49,7 @@ public class OperatorManager {
 
             String line = reader.readLine();
             if (line != null) {
-                String[] mealData = line.split(",");
+                String[] mealData = line.split("#");
                 if (mealData.length < 7) {
                     return;
                 }

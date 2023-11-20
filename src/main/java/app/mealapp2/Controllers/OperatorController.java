@@ -55,8 +55,10 @@ public class OperatorController {
     private Button goToMainMenuButton;
     @FXML
     private Button checkUserOrderPerMonth;
+//    @FXML
+//    private Button ordersForGuests;
     @FXML
-    private Button ordersForGuests;
+    private Button checkOrdersButton;
     @FXML
     private Label quantityOrdersToday;
 

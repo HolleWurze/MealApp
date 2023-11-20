@@ -195,7 +195,7 @@ public class OrderManager {
         String surname = nameAndSurname[1];
 
         // Извлечь значения заказа
-        String[] orderFields = lines.get(1).split(",");
+        String[] orderFields = lines.get(1).split("#");
         if (orderFields.length < 7) {
             return null;  // неправильный формат файла
         }
