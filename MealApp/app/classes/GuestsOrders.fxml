@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import com.sun.javafx.scene.control.IntegerField?>
+<?import javafx.geometry.Insets?>
+
+<?import javafx.scene.control.cell.TextFieldTableCell?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<HBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="app.mealapp2.Controllers.GuestsOrdersController" prefHeight="600.0" prefWidth="1000.0"
+      spacing="5.0">
+
+    <VBox spacing="10">
+        <padding>
+            <Insets top="10" right="10" bottom="10" left="10"/>
+        </padding>
+        <Label text="Add duplicate orders:"/>
+        <TextField fx:id="catering" promptText="Catering"/>
+        <TextField fx:id="mainDish" promptText="mainDish"/>
+        <TextField fx:id="sideDish" promptText="sideDish"/>
+        <TextField fx:id="salads" promptText="salads"/>
+        <TextField fx:id="water" promptText="water"/>
+        <TextField fx:id="comment" promptText="Comment"/>
+        <TextField fx:id="quantity" promptText="Quantity"/>
+        <CheckBox fx:id="cibusCheckBox" text="Cibus"/>
+    </VBox>
+
+    <VBox HBox.hgrow="ALWAYS" spacing="10">
+        <padding>
+            <Insets top="10" right="10" bottom="10" left="10"/>
+        </padding>
+
+        <HBox spacing="10">
+            <Label text="Add individual orders:"/>
+            <Button text="+" onAction="#addRow"/>
+            <Button text="-" onAction="#deleteSelectedRow"/>
+        </HBox>
+
+        <TableView fx:id="mealTable" VBox.vgrow="ALWAYS" editable="true">
+            <columns>
+                <TableColumn fx:id="cateringColumn" text="Catering">
+                    <cellFactory>
+                        <TextFieldTableCell fx:factory="forTableColumn"/>
+                    </cellFactory>
+                    <cellValueFactory>
+                        <PropertyValueFactory property="catering" />
+                    </cellValueFactory>
+                </TableColumn>
+
+                <TableColumn fx:id="mainDishColumn" text="Main dish">
+                    <cellFactory>
+                        <TextFieldTableCell fx:factory="forTableColumn"/>
+                    </cellFactory>
+                    <cellValueFactory>
+                        <PropertyValueFactory property="mainDish" />
+                    </cellValueFactory>
+                </TableColumn>
+
+                <TableColumn fx:id="sideDishColumn" text="Side dish">
+                    <cellFactory>
+                        <TextFieldTableCell fx:factory="forTableColumn"/>
+                    </cellFactory>
+                    <cellValueFactory>
+                        <PropertyValueFactory property="sideDish" />
+                    </cellValueFactory>
+                </TableColumn>
+
+                <TableColumn fx:id="saladColumn" text="Salad">
+                    <cellFactory>
+                        <TextFieldTableCell fx:factory="forTableColumn"/>
+                    </cellFactory>
+                    <cellValueFactory>
+                        <PropertyValueFactory property="salads" />
+                    </cellValueFactory>
+                </TableColumn>
+
+                <TableColumn fx:id="waterColumn" text="Drink">
+                    <cellFactory>
+                        <TextFieldTableCell fx:factory="forTableColumn"/>
+                    </cellFactory>
+                    <cellValueFactory>
+                        <PropertyValueFactory property="water" />
+                    </cellValueFactory>
+                </TableColumn>
+
+                <TableColumn fx:id="commentColumn" text="Comment">
+                    <cellFactory>
+                        <TextFieldTableCell fx:factory="forTableColumn"/>
+                    </cellFactory>
+                    <cellValueFactory>
+                        <PropertyValueFactory property="addition" />
+                    </cellValueFactory>
+                </TableColumn>
+
+                <TableColumn fx:id="cibusColumn" text="Cibus">
+                    <cellFactory>
+                        <TextFieldTableCell fx:factory="forTableColumn"/>
+                    </cellFactory>
+                    <cellValueFactory>
+                        <PropertyValueFactory property="cibus" />
+                    </cellValueFactory>
+                </TableColumn>
+
+            </columns>
+        </TableView>
+        <HBox spacing="10" alignment="CENTER">
+            <Button text="Save guests orders" onAction="#saveOrdersToFile"/>
+            <Button text="Change guests orders" onAction="#changeGuestsOrders"/>
+            <Button text="Delete guests orders file" onAction="#deleteGuestsOrdersFile"/>
+        </HBox>
+    </VBox>
+
+</HBox>

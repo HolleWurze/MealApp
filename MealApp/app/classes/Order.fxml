@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml/1"
+            xmlns="http://javafx.com/javafx/11.0.1" fx:controller="app.mealapp2.Controllers.OrderController" prefHeight="1000" prefWidth="1680">
+    <!-- Top section with the image -->
+    <top>
+        <StackPane>
+            <ImageView fitHeight="500" fitWidth="1660" fx:id="menuImageView"/>
+        </StackPane>
+    </top>
+
+    <!-- Center section with inputs and buttons -->
+    <center>
+        <VBox spacing="10" prefHeight="200">
+            <HBox spacing="10" alignment="CENTER">
+                <Label text=": קיטרינג"/>
+                <ChoiceBox fx:id="cateringChoiceBox" prefWidth="150"/>
+                <TextField fx:id="mainDish" promptText="עיקריות" prefWidth="150" prefHeight="150"/>
+                <TextField fx:id="sideDish" promptText="תוספות" prefWidth="150" prefHeight="150"/>
+                <TextField fx:id="salads" promptText="סלטים" prefWidth="150" prefHeight="150"/>
+                <TextField fx:id="water" promptText="שתיה" prefWidth="150" prefHeight="150"/>
+                <TextField fx:id="addition" promptText="הערות" prefWidth="150" prefHeight="150"/>
+                <CheckBox fx:id="cibusCheckBox" text="נא לסמן אם ברשותך סיבוס"/>
+            </HBox>
+
+            <HBox spacing="10" alignment="CENTER" style="-fx-padding: 0 0 0 100;">
+                <Button fx:id="deleteOrderButton" onAction="#deleteOrder"/>
+                <Button fx:id="changeOrderButton" onAction="#changeOrder"/>
+                <Button fx:id="addToFavoritesButton" onAction="#addToFavorites"/>
+                <Button fx:id="showFavoritesButton" onAction="#showFavorites"/>
+                <Button fx:id="deleteFavoritesButton" onAction="#deleteFavorites"/>
+                <Button fx:id="placeOrderButton" onAction="#placeOrder"/>
+                <Button fx:id="confirmChangesButton" onAction="#confirmChanges" visible="false" prefHeight="150"/>
+            </HBox>
+
+            <TableView fx:id="favoritesTableView" prefWidth="150">
+                <columns>
+                    <TableColumn fx:id="cateringColumn" text="קיטרינג"/>
+                    <TableColumn fx:id="mainDishColumn" text="עיקריות"/>
+                    <TableColumn fx:id="sideDishColumn" text="תוספות"/>
+                    <TableColumn fx:id="saladsColumn" text="סלטים"/>
+                    <TableColumn fx:id="waterColumn" text="שתיה"/>
+                    <TableColumn fx:id="additionColumn" text="הערות"/>
+                    <TableColumn fx:id="cibusColumn" text="סיבוס"/>
+                </columns>
+            </TableView>
+        </VBox>
+    </center>
+
+    <!-- Bottom section with the label and button -->
+    <bottom>
+        <VBox spacing="10" prefHeight="200">
+            <Label fx:id="infoLabel"/>
+            <Button fx:id="goToMainMenuButton" onAction="#goToMainMenu"/>
+        </VBox>
+    </bottom>
+</BorderPane>
+
+
+
+
+

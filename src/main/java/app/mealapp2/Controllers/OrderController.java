@@ -9,6 +9,7 @@ import app.mealapp2.Storage.CateringDataStore;
 import app.mealapp2.Styles.StyleUtil;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -39,7 +40,9 @@ public class OrderController {
     List<Order> favoriteOrders = new ArrayList<>();
 
     @FXML
-    public Button goToMainMenuButton;
+    private Button goToMainMenuButton;
+    @FXML
+    private Button deleteOrderButton;
     @FXML
     private Button confirmChangesButton;
     @FXML
@@ -119,12 +122,13 @@ public class OrderController {
         });
 
         StyleUtil.stylePlaceOrderButton(placeOrderButton, "Place Order");
-        StyleUtil.styleAllButton(changeOrderButton, "Change Order", "⤧", 20);
-        StyleUtil.styleAllButton(addToFavoritesButton, "Add to Favorites", "⤽", 20);
-        StyleUtil.styleAllButton(showFavoritesButton, "Show Favorites", "≟", 20);
-        StyleUtil.styleAllButton(deleteFavoritesButton, "Delete Favorites", "⤼", 20);
-        StyleUtil.styleAllButton(confirmChangesButton, "Confirm Changes", "", 14);
-        StyleUtil.styleAllButton(goToMainMenuButton, "Back to Main Menu", "", 14);
+        StyleUtil.styleAllButton(changeOrderButton, "Change Order", "✎", 20);
+        StyleUtil.styleAllButton(deleteOrderButton, "Delete Order", "❌", 20);
+        StyleUtil.styleAllButton(addToFavoritesButton, "Add to Favorites", "➕", 20);
+        StyleUtil.styleAllButton(showFavoritesButton, "Show Favorites", "\uD83D\uDD0D", 20);
+        StyleUtil.styleAllButton(deleteFavoritesButton, "Delete Favorites", "\uD83D\uDDD1", 20);
+        StyleUtil.styleAllButton(confirmChangesButton, "Confirm Changes", "✅", 14);
+        StyleUtil.styleAllButton(goToMainMenuButton, "Back to Main Menu", "\uD83D\uDD19", 14);
     }
 
     @FXML
@@ -360,34 +364,84 @@ public class OrderController {
     }
 
     @FXML
+    private void deleteOrder() {
+        LocalDate today = LocalDate.now();
+        String orderFileNamePattern = today + "_.*_" + user.getName() + "_" + user.getSurname() + "\\.txt";
+        Path orderFolderPath = Paths.get(Constants.SERVER_FOLDER_PATH, "Orders");
+        File folder = orderFolderPath.toFile();
+        File[] matchingFiles = folder.listFiles((dir, name) -> name.matches(orderFileNamePattern));
+
+        if (matchingFiles != null && matchingFiles.length > 0) {
+            try {
+                Files.delete(matchingFiles[0].toPath());
+
+                mainDish.setText("");
+                sideDish.setText("");
+                salads.setText("");
+                addition.setText("");
+                water.setText("");
+                cibusCheckBox.setSelected(false);
+                showAlert("Success", "Order deleted successfully.");
+            } catch (IOException e) {
+                e.printStackTrace();
+                showAlert("Error", "An error occurred while deleting your order.");
+            }
+        } else {
+            showAlert("Info", "No order found for today to delete.");
+        }
+    }
+
+    private boolean areOrderFieldsEmpty() {
+        return mainDish.getText().trim().isEmpty() &&
+                sideDish.getText().trim().isEmpty() &&
+                salads.getText().trim().isEmpty() &&
+                addition.getText().trim().isEmpty() &&
+                water.getText().trim().isEmpty();
+    }
+
+    @FXML
     public void confirmChanges() {
-        String cateringName = cateringChoiceBox.getValue().replaceAll("[^a-zA-Z0-9\\._]+", "_");
-        String orderFileName = LocalDate.now() + "_" + cateringName + "_" + user.getName() + "_" + user.getSurname() + ".txt";
+        if (areOrderFieldsEmpty()) {
+            Alert confirmDeletionAlert = new Alert(Alert.AlertType.CONFIRMATION, "It seems you want to delete the order.\nDo you really want to do this?", ButtonType.YES, ButtonType.NO);
+            Optional<ButtonType> result = confirmDeletionAlert.showAndWait();
+            if (result.isPresent() && result.get() == ButtonType.YES) {
+                deleteOrder();
+                confirmChangesButton.setVisible(false);
+            } else {
+                return;
+            }
+        } else {
 
-        Path orderFilePath = Paths.get(Constants.SERVER_FOLDER_PATH, "Orders", orderFileName);
+            String cateringName = cateringChoiceBox.getValue().replaceAll("[^a-zA-Z0-9\\._]+", "_");
+            String orderFileName = LocalDate.now() + "_" + cateringName + "_" + user.getName() + "_" + user.getSurname() + ".txt";
 
-        try (BufferedWriter writer = Files.newBufferedWriter(orderFilePath)) {
-            writer.write(user.getName() + "," + user.getSurname());
-            writer.newLine();
-            writer.write(cateringChoiceBox.getValue() + "#"
-                    + mainDish.getText() + "#"
-                    + sideDish.getText() + "#"
-                    + salads.getText() + "#"
-                    + addition.getText() + "#"
-                    + water.getText() + "#"
-                    + (cibusCheckBox.isSelected() ? "YES" : "NO"));
+            Path orderFilePath = Paths.get(Constants.SERVER_FOLDER_PATH, "Orders", orderFileName);
 
-            confirmChangesButton.setVisible(false);
-            showAlert("Success", "Your order has been successfully updated");
+            try (BufferedWriter writer = Files.newBufferedWriter(orderFilePath)) {
+                writer.write(user.getName() + "," + user.getSurname());
+                writer.newLine();
+                writer.write(cateringChoiceBox.getValue() + "#"
+                        + mainDish.getText() + "#"
+                        + sideDish.getText() + "#"
+                        + salads.getText() + "#"
+                        + addition.getText() + "#"
+                        + water.getText() + "#"
+                        + (cibusCheckBox.isSelected() ? "YES" : "NO"));
 
-        } catch (IOException e) {
-            e.printStackTrace();
-            showAlert("Error", "An error occurred while updating your order");
+                confirmChangesButton.setVisible(false);
+                showAlert("Success", "Your order has been successfully updated");
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                showAlert("Error", "An error occurred while updating your order");
+            }
         }
         setOtherButtonsDisabled(false);
+        deleteOrderButton.setVisible(true);
     }
 
     private void setOtherButtonsDisabled(boolean disabled) {
+        deleteOrderButton.setDisable(disabled);
         placeOrderButton.setDisable(disabled);
         changeOrderButton.setDisable(disabled);
         addToFavoritesButton.setDisable(disabled);
@@ -402,7 +456,6 @@ public class OrderController {
         alert.setContentText(info);
         alert.showAndWait();
     }
-
 
     @FXML
     private void goToMainMenu() throws IOException {

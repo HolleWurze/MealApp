@@ -27,7 +27,8 @@
                 <CheckBox fx:id="cibusCheckBox" text="נא לסמן אם ברשותך סיבוס"/>
             </HBox>
 
-            <HBox spacing="10" alignment="CENTER">
+            <HBox spacing="10" alignment="CENTER" style="-fx-padding: 0 0 0 100;">
+                <Button fx:id="deleteOrderButton" onAction="#deleteOrder"/>
                 <Button fx:id="changeOrderButton" onAction="#changeOrder"/>
                 <Button fx:id="addToFavoritesButton" onAction="#addToFavorites"/>
                 <Button fx:id="showFavoritesButton" onAction="#showFavorites"/>
