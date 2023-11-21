@@ -10,6 +10,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.apache.poi.ss.usermodel.Cell;
@@ -17,6 +19,8 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import java.awt.*;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -200,13 +204,16 @@ public class OperatorController {
             createCell(row, 7, meal.getCibus() ? "YES" : "NO");
         }
 
-        try (FileOutputStream outputStream = new FileOutputStream(Constants.SERVER_FOLDER_PATH + "\\Reports" + "/orders_" + LocalDate.now() + ".xlsx")) {
+        String filePath = Constants.SERVER_FOLDER_PATH + "\\Reports" + "/orders_" + LocalDate.now() + ".xlsx";
+        try (FileOutputStream outputStream = new FileOutputStream(filePath)) {
             workbook.write(outputStream);
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Success");
             alert.setHeaderText("Excel File");
             alert.setContentText("Excel File successfully create!");
             alert.showAndWait();
+
+            openExcelFile(filePath);
         } catch (IOException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
@@ -220,6 +227,21 @@ public class OperatorController {
     private void createCell(Row row, int columnCount, String value) {
         Cell cell = row.createCell(columnCount);
         cell.setCellValue(value);
+    }
+
+    private void openExcelFile(String filePath) {
+        if (Desktop.isDesktopSupported()) {
+            try {
+                File file = new File(filePath);
+                Desktop.getDesktop().open(file);
+            } catch (IOException ex) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText("Opening File");
+                alert.setContentText("Error occurred while opening the file.");
+                alert.showAndWait();
+            }
+        }
     }
 
     private void setupTableView() {
