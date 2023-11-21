@@ -9,10 +9,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.apache.poi.ss.usermodel.Cell;
@@ -23,6 +20,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -57,6 +55,12 @@ public class OperatorController {
     private Button goToMainMenuButton;
     @FXML
     private Button checkUserOrderPerMonth;
+//    @FXML
+//    private Button ordersForGuests;
+    @FXML
+    private Button checkOrdersButton;
+    @FXML
+    private Label quantityOrdersToday;
 
     public OperatorController() {
         operatorManager = new OperatorManager();
@@ -105,14 +109,40 @@ public class OperatorController {
         for (List<Order> orders : groupedOrders.values()) {
             ordersTable.getItems().addAll(orders);
         }
+        quantityOrdersToday.setText("Quantity of orders for today: " + ordersTable.getItems().size());
+        quantityOrdersToday.setVisible(true);
     }
+
+    @FXML
+    public void makeOrdersForGuests() {
+        try {
+            // Загрузка FXML файла
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/GuestsOrders.fxml"));
+            Parent root = fxmlLoader.load();
+
+            // Создание новой сцены
+            Scene scene = new Scene(root, 1000, 600);
+
+            // Создание нового окна и установка сцены
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.setTitle("Make Orders for Guests");
+
+            // Показать новое окно
+            stage.show();
+        } catch (Exception e) {
+            // Обработка исключений
+            e.printStackTrace();
+        }
+    }
+
 
     @FXML
     private void goToMainMenu() throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/Start.fxml"));
         Scene scene = new Scene(root);
         Stage stage = (Stage) goToMainMenuButton.getScene().getWindow();
-        stage.setMaximized(true);
+        //stage.setMaximized(true);
         stage.setScene(scene);
         stage.show();
     }
@@ -128,13 +158,25 @@ public class OperatorController {
         stage.showAndWait();
     }
 
+    public List<Order> generateOrdersFromFiles() {
+        Map<String, List<Order>> ordersGroupedByCatering = operatorManager.loadOrders();
+        List<Order> allOrders = new ArrayList<>();
+
+        for (List<Order> orders : ordersGroupedByCatering.values()) {
+            allOrders.addAll(orders);
+        }
+
+        return allOrders;
+    }
+
     @FXML
     public void handleCreateExcelButtonAction() {
+        List<Order> allOrders = generateOrdersFromFiles();
+
         XSSFWorkbook workbook = new XSSFWorkbook();
         String date = LocalDate.now().toString();
         XSSFSheet sheet = workbook.createSheet("Orders_" + date);
 
-        // Создание строки заголовков
         String[] headers = new String[]{"Name", "Catering", "Main Dish", "Side Dish", "Salads", "Drink", "Comment", "Cibus"};
         Row headerRow = sheet.createRow(0);
         for (int i = 0; i < headers.length; i++) {
@@ -142,8 +184,8 @@ public class OperatorController {
             cell.setCellValue(headers[i]);
         }
 
-        int rowNum = 1;  // начало с 1, так как 0-ая строка используется для заголовков
-        for (Order order : ordersTable.getItems()) {
+        int rowNum = 1;
+        for (Order order : allOrders) {
             Row row = sheet.createRow(rowNum++);
             createCell(row, 0, order.getName() + " " + order.getSurname());
 
@@ -155,9 +197,9 @@ public class OperatorController {
             createCell(row, 4, meal.getSalads());
             createCell(row, 6, meal.getWater());
             createCell(row, 5, meal.getAddition());
-            createCell(row, 7, meal.isCibus() ? "YES" : "NO");
+            createCell(row, 7, meal.getCibus() ? "YES" : "NO");
         }
-        //Создание файла excel по заданному пути
+
         try (FileOutputStream outputStream = new FileOutputStream(Constants.SERVER_FOLDER_PATH + "\\Reports" + "/orders_" + LocalDate.now() + ".xlsx")) {
             workbook.write(outputStream);
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -188,7 +230,7 @@ public class OperatorController {
         saladColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getMeal().getSalads()));
         waterColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getMeal().getWater()));
         additionColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getMeal().getAddition()));
-        cibusColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getMeal().isCibus() ? "YES" : "NO"));
+        cibusColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getMeal().getCibus() ? "YES" : "NO"));
 
         int numberOfColumns = 8;
         cateringColumn.prefWidthProperty().bind(ordersTable.widthProperty().divide(numberOfColumns));

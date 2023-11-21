@@ -1,43 +1,63 @@
 package app.mealapp2.Entity;
 
-import lombok.Getter;
-import lombok.Setter;
+import javafx.beans.binding.BooleanBinding;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import lombok.*;
 
 import java.util.Objects;
 
-@Getter
-@Setter
+@Data
 public class Meal {
-    private String catering;
-    private String mainDish;
-    private String sideDish;
-    private String salads;
-    private String addition;
-    private String water;
-    private boolean cibus;
+
+    private SimpleStringProperty catering;
+    private SimpleStringProperty mainDish;
+    private SimpleStringProperty sideDish;
+    private SimpleStringProperty salads;
+    private SimpleStringProperty water;
+    private SimpleStringProperty addition;
+    private SimpleBooleanProperty cibus;
 
 
-    // конструктор
-    public Meal(String catering, String mainDish, String sideDish, String salads, String addition, String water, boolean cibus) {
-        this.catering = catering;
-        this.mainDish = mainDish;
-        this.sideDish = sideDish;
-        this.salads = salads;
-        this.addition = addition;
-        this.water = water;
-        this.cibus = cibus;
+    public Meal(String catering, String mainDish, String sideDish, String salads, String water, String addition, boolean cibus) {
+
+        this.catering = new SimpleStringProperty(catering);
+        this.mainDish = new SimpleStringProperty(mainDish);
+        this.sideDish = new SimpleStringProperty(sideDish);
+        this.salads = new SimpleStringProperty(salads);
+        this.water = new SimpleStringProperty(water);
+        this.addition = new SimpleStringProperty(addition);
+        this.cibus = new SimpleBooleanProperty(cibus);
+    }
+
+    public boolean isEmpty() {
+        boolean mealIsEmpty;
+        mealIsEmpty = mainDish.get().isEmpty() && sideDish.get().isEmpty() && salads.get().isEmpty() && water.get().isEmpty() && addition.get().isEmpty();
+        return mealIsEmpty;
     }
 
     public String toCsvString() {
-        return catering + "," + mainDish + "," + sideDish + "," + salads + "," + addition + "," + water + ", " + (cibus ? "YES" : "NO");
+        return catering.get() + "#" +
+                mainDish.get() + "#" +
+                sideDish.get() + "#" +
+                salads.get() + "#" +
+                water.get() + "#" +
+                addition.get() + "#" +
+                (cibus.get() ? "YES" : "NO");
     }
 
     @Override
     public String toString() {
-        return catering + ", " + mainDish + ", " + sideDish + ", " + salads + ", " + addition + ", " + water + ", " + (cibus ? "YES" : "NO");
+        return catering.get() + "#" +
+                mainDish.get() + "#" +
+                sideDish.get() + "#" +
+                salads.get() + "#" +
+                water.get() + "#" +
+                addition.get() + "#" +
+                (cibus.get() ? "YES" : "NO");
     }
 
-    @Override
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
@@ -46,18 +66,60 @@ public class Meal {
             return false;
         }
         Meal meal = (Meal) obj;
-        return Objects.equals(catering, meal.catering) &&
-                Objects.equals(mainDish, meal.mainDish) &&
-                Objects.equals(sideDish, meal.sideDish) &&
-                Objects.equals(salads, meal.salads) &&
-                Objects.equals(addition, meal.addition) &&
-                Objects.equals(water, meal.water) &&
-                cibus == meal.cibus;
+        return Objects.equals(catering.get(), meal.catering.get()) &&
+                Objects.equals(mainDish.get(), meal.mainDish.get()) &&
+                Objects.equals(sideDish.get(), meal.sideDish.get()) &&
+                Objects.equals(salads.get(), meal.salads.get()) &&
+                Objects.equals(water.get(), meal.water.get()) &&
+                Objects.equals(addition.get(), meal.addition.get()) &&
+                cibus.get() == meal.cibus.get();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(catering, mainDish, sideDish, salads, addition, water, cibus);
+        return Objects.hash(catering.get(), mainDish.get(), sideDish.get(), salads.get(), water.get(), addition.get(), cibus.get());
     }
 
+    public String getCatering() {
+        return catering.get();
+    }
+    public void setCatering(String value) {
+        catering.set(value);
+    }
+    public String getMainDish() {
+        return mainDish.get();
+    }
+    public void setMainDish(String value) {
+        mainDish.set(value);
+    }
+    public String getSideDish() {
+        return sideDish.get();
+    }
+    public void setSideDish(String value) {
+        sideDish.set(value);
+    }
+    public String getSalads() {
+        return salads.get();
+    }
+    public void setSalads(String value) {
+        salads.set(value);
+    }
+    public String getAddition() {
+        return addition.get();
+    }
+    public void setAddition(String value) {
+        addition.set(value);
+    }
+    public String getWater() {
+        return water.get();
+    }
+    public void setWater(String value) {
+        water.set(value);
+    }
+    public boolean getCibus() {
+        return cibus.get();
+    }
+    public void setCibus(boolean value) {
+        cibus.set(value);
+    }
 }

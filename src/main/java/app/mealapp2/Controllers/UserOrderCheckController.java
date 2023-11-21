@@ -2,6 +2,7 @@ package app.mealapp2.Controllers;
 
 import app.mealapp2.Constants;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
@@ -12,10 +13,10 @@ import java.util.Map;
 
 public class UserOrderCheckController {
 
-        @FXML
-        private TextField nameField, surnameField, monthField;
-        @FXML
-        private Label resultLabel;
+    @FXML
+    private TextField nameField, surnameField, monthField;
+    @FXML
+    private Label resultLabel;
 
     @FXML
     public void checkOrders() {
@@ -32,11 +33,17 @@ public class UserOrderCheckController {
 
         Map<String, Integer> cateringOrders = getCateringOrdersForUser(name, surname, year, month);
         StringBuilder result = new StringBuilder();
+        if (cateringOrders.isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Warning");
+            alert.setHeaderText("Empty Output");
+            alert.setContentText(String.valueOf(result.append(String.format("%s didn't order this month\n", name + " " + surname))));
+            alert.showAndWait();
+        }
         for (Map.Entry<String, Integer> entry : cateringOrders.entrySet()) {
             result.append(String.format("%s ordered %d times in %s catering.\n", name + " " + surname, entry.getValue(), entry.getKey()));
+            resultLabel.setText(result.toString());
         }
-
-        resultLabel.setText(result.toString());
     }
 
     private Map<String, Integer> getCateringOrdersForUser(String name, String surname, String year, String month) {

@@ -33,7 +33,8 @@ public class Order {
         return this.getMeal().getCatering() + ", " + this.getMeal().getMainDish() + ", " +
                 this.getMeal().getSideDish() + ", " + this.getMeal().getSalads() + ", " +
                 this.getMeal().getAddition() + ", " + this.getMeal().getWater() + ", " +
-                this.getMeal().isCibus();
+//                this.getMeal().isCibus();
+                this.getMeal().getCibus();
     }
 
     @Override

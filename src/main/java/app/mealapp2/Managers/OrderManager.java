@@ -28,7 +28,7 @@ public class OrderManager {
             if (meal == null) {
                 return "Order cannot be saved because it doesn't contain a meal.";
             }
-            String cateringName = meal.getCatering().replaceAll("[^a-zA-Z0-9\\._]+", "_");
+            String cateringName = meal.getCatering().replaceAll("[^a-zA-Z0-9\\._]+", "_"); //ДОБАВЛЕН GET
             String filename = LocalDate.now() + "_" + cateringName + "_" + order.getName() + "_" + order.getSurname() + ".txt";
 
             // Проверяем, существует ли уже заказ для этого пользователя на сегодняшнюю дату
@@ -155,7 +155,7 @@ public class OrderManager {
 
         String line;
         while ((line = reader.readLine()) != null) {
-            String[] mealData = line.split(",");
+            String[] mealData = line.split("#");
 
             String catering = mealData.length > 0 ? mealData[0].trim() : "";
             String mainDish = mealData.length > 1 ? mealData[1].trim() : "";
@@ -195,7 +195,7 @@ public class OrderManager {
         String surname = nameAndSurname[1];
 
         // Извлечь значения заказа
-        String[] orderFields = lines.get(1).split(",");
+        String[] orderFields = lines.get(1).split("#");
         if (orderFields.length < 7) {
             return null;  // неправильный формат файла
         }

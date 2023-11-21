@@ -13,10 +13,11 @@ public class StyleUtil {
 
     public static void stylePlaceOrderButton(Button button, String buttonText) {
         button.setStyle(
-                "-fx-background-color: #0077bb; " + // Темно-синий цвет для состояния "по умолчанию"
+                "-fx-background-color: #229342; " + // Темно-синий цвет для состояния "по умолчанию"
                         "-fx-border: none; " +
                         "-fx-text-fill: #FFFFFF; " +
                         "-fx-font-size: 14px; " +
+                        "-fx-font-weight: bold; " +
                         "-fx-padding: 7px; " +
                         "-fx-min-width: 150px; " +
                         "-fx-border-radius: 2px; " +
@@ -24,10 +25,11 @@ public class StyleUtil {
         );
 
         button.setOnMouseEntered(e -> button.setStyle(
-                "-fx-background-color: #b9dff1; " + // Цвет фона при наведении
+                "-fx-background-color: #33df64; " + // Цвет фона при наведении
                         "-fx-border: none; " +
                         "-fx-text-fill: #FFFFFF; " +
                         "-fx-font-size: 14px; " +
+                        "-fx-font-weight: bold; " +
                         "-fx-padding: 7px; " +
                         "-fx-min-width: 150px; " +
                         "-fx-border-radius: 2px; " +
@@ -35,10 +37,11 @@ public class StyleUtil {
         ));
 
         button.setOnMouseExited(e -> button.setStyle(
-                "-fx-background-color: #0077bb; " + // Темно-синий цвет для состояния "по умолчанию"
+                "-fx-background-color: #229342; " + // Темно-синий цвет для состояния "по умолчанию"
                         "-fx-border: none; " +
                         "-fx-text-fill: #FFFFFF; " +
                         "-fx-font-size: 14px; " +
+                        "-fx-font-weight: bold; " +
                         "-fx-padding: 7px; " +
                         "-fx-min-width: 150px; " +
                         "-fx-border-radius: 2px; " +
@@ -80,6 +83,7 @@ public class StyleUtil {
                         "-fx-border: none; " +
                         "-fx-text-fill: #FFFFFF; " +
                         "-fx-font-size: 14px; " +
+                        "-fx-font-weight: bold; " +
                         "-fx-padding: 7px; " +
                         "-fx-min-width: 150px; " +
                         "-fx-border-radius: 2px; " +
@@ -91,6 +95,7 @@ public class StyleUtil {
                         "-fx-border: none; " +
                         "-fx-text-fill: #FFFFFF; " +
                         "-fx-font-size: 14px; " +
+                        "-fx-font-weight: bold; " +
                         "-fx-padding: 7px; " +
                         "-fx-min-width: 150px; " +
                         "-fx-border-radius: 2px; " +
@@ -102,6 +107,7 @@ public class StyleUtil {
                         "-fx-border: none; " +
                         "-fx-text-fill: #FFFFFF; " +
                         "-fx-font-size: 14px; " +
+                        "-fx-font-weight: bold; " +
                         "-fx-padding: 7px; " +
                         "-fx-min-width: 150px; " +
                         "-fx-border-radius: 2px; " +
@@ -121,51 +127,6 @@ public class StyleUtil {
 
         button.setGraphic(buttonContent);
     }
-
-//    public static void styleChoiceBox(ChoiceBox<?> choiceBox) {
-//        // Применение стиля к основному элементу ChoiceBox
-//        choiceBox.setStyle(
-//                "-fx-background-color: #0077bb; " + // Темно-синий цвет для состояния "по умолчанию"
-//                        "-fx-border: none; " +
-//                        "-fx-text-fill: #FFFFFF; " +
-//                        "-fx-font-size: 14px; " +
-//                        "-fx-padding: 7px; " +
-//                        "-fx-min-width: 150px; " +
-//                        "-fx-border-radius: 2px; "
-//        );
-//
-//        // Изменение стиля при наведении и уходе курсора
-//        choiceBox.setOnMouseEntered(e -> choiceBox.setStyle(
-//                "-fx-background-color: #b9dff1; " + // Цвет фона при наведении
-//                        "-fx-border: none; " +
-//                        "-fx-text-fill: #FFFFFF; " +
-//                        "-fx-font-size: 14px; " +
-//                        "-fx-padding: 7px; " +
-//                        "-fx-min-width: 150px; " +
-//                        "-fx-border-radius: 2px; "
-//        ));
-//
-//        choiceBox.setOnMouseExited(e -> choiceBox.setStyle(
-//                "-fx-background-color: #0077bb; " + // Темно-синий цвет для состояния "по умолчанию"
-//                        "-fx-border: none; " +
-//                        "-fx-text-fill: #FFFFFF; " +
-//                        "-fx-font-size: 14px; " +
-//                        "-fx-padding: 7px; " +
-//                        "-fx-min-width: 150px; " +
-//                        "-fx-border-radius: 2px; "
-//        ));
-//
-//        // Применение стиля к выпадающему списку и решение проблемы с "улетанием"
-//        choiceBox.showingProperty().addListener((observable, oldValue, newValue) -> {
-//            if (newValue) {
-//                Node popup = choiceBox.lookup(".context-menu");
-//                if (popup != null) {
-//                    popup.setStyle("-fx-background-color: #0077bb; " +
-//                            "-fx-text-fill: #FFFFFF;");  // Стиль для выпадающего списка
-//                }
-//            }
-//        });
-//    }
 
     public static void styleStartButton(Button button, String buttonText, int textSize, String symbolCode, int symbolSize) {
         button.setStyle(
