@@ -15,9 +15,12 @@ import javafx.scene.control.Label;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
 
 import java.awt.*;
 import java.io.File;
@@ -172,6 +175,25 @@ public class OperatorController {
         return allOrders;
     }
 
+    private boolean isHebrew(String text) {
+        for (char c : text.toCharArray()) {
+            if ((c >= 0x0590 && c <= 0x05FF) || (c >= 0xFB1D && c <= 0xFB4F)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private CellStyle getHebrewCellStyle(XSSFWorkbook workbook) {
+        XSSFCellStyle style = workbook.createCellStyle();
+        style.setAlignment(HorizontalAlignment.RIGHT);
+        return style;
+    }
+
+    private CellStyle getDefaultCellStyle(XSSFWorkbook workbook) {
+        return workbook.createCellStyle(); // Можно настроить стиль по умолчанию, если нужно
+    }
+
     @FXML
     public void handleCreateExcelButtonAction() {
         List<Order> allOrders = generateOrdersFromFiles();
@@ -188,19 +210,34 @@ public class OperatorController {
         }
 
         int rowNum = 1;
+//        for (Order order : allOrders) {
+//            Row row = sheet.createRow(rowNum++);
+//            createCell(row, 0, order.getName() + " " + order.getSurname());
+//
+//            Meal meal = order.getMeal(); // Получаем блюдо напрямую из заказа
+//
+//            createCell(row, 1, meal.getCatering());
+//            createCell(row, 2, meal.getMainDish());
+//            createCell(row, 3, meal.getSideDish());
+//            createCell(row, 4, meal.getSalads());
+//            createCell(row, 6, meal.getWater());
+//            createCell(row, 5, meal.getAddition());
+//            createCell(row, 7, meal.getCibus() ? "YES" : "NO");
+//        }
+
         for (Order order : allOrders) {
             Row row = sheet.createRow(rowNum++);
-            createCell(row, 0, order.getName() + " " + order.getSurname());
+            createCell(row, 0, order.getName() + " " + order.getSurname(), workbook);
+            Meal meal = order.getMeal();
 
-            Meal meal = order.getMeal(); // Получаем блюдо напрямую из заказа
-
-            createCell(row, 1, meal.getCatering());
-            createCell(row, 2, meal.getMainDish());
-            createCell(row, 3, meal.getSideDish());
-            createCell(row, 4, meal.getSalads());
-            createCell(row, 6, meal.getWater());
-            createCell(row, 5, meal.getAddition());
-            createCell(row, 7, meal.getCibus() ? "YES" : "NO");
+            // Создаем ячейки с правильным стилем для каждого значения
+            createCell(row, 1, meal.getCatering(), workbook);
+            createCell(row, 2, meal.getMainDish(), workbook);
+            createCell(row, 3, meal.getSideDish(), workbook);
+            createCell(row, 4, meal.getSalads(), workbook);
+            createCell(row, 5, meal.getWater(), workbook);
+            createCell(row, 6, meal.getAddition(), workbook);
+            createCell(row, 7, meal.getCibus() ? "YES" : "NO", workbook);
         }
 
         String filePath = Constants.SERVER_FOLDER_PATH + "\\Reports" + "/orders_" + LocalDate.now() + ".xlsx";
@@ -223,9 +260,21 @@ public class OperatorController {
         }
     }
 
-    private void createCell(Row row, int columnCount, String value) {
-        Cell cell = row.createCell(columnCount);
+//    private void createCell(Row row, int columnCount, String value) {
+//        Cell cell = row.createCell(columnCount);
+//        cell.setCellValue(value);
+//    }
+
+    private void createCell(Row row, int column, String value, XSSFWorkbook workbook) {
+        Cell cell = row.createCell(column);
         cell.setCellValue(value);
+
+        // Применяем стиль в зависимости от языка
+        if (isHebrew(value)) {
+            cell.setCellStyle(getHebrewCellStyle(workbook));
+        } else {
+            cell.setCellStyle(getDefaultCellStyle(workbook));
+        }
     }
 
     private void openExcelFile(String filePath) {
