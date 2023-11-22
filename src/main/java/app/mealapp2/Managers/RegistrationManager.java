@@ -3,8 +3,10 @@ package app.mealapp2.Managers;
 import app.mealapp2.Constants;
 import javafx.scene.control.Alert;
 
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.File;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -56,15 +58,20 @@ public class RegistrationManager {
         }
 
         Path filePath = dirPath.resolve("AllRegistrationUsers.txt");
+        String user = name + "_" + surname;
 
-        String user = name + "_" + surname + System.lineSeparator();
-
-        // Проверка на наличие пользователя в файле на сервере
         if (!checkUserOnServer(name, surname)) {
-            if (!Files.exists(filePath)) {
-                Files.createFile(filePath);
+            String content = "";
+            if (Files.exists(filePath)) {
+                content = new String(Files.readAllBytes(filePath), StandardCharsets.UTF_8);
             }
-            Files.write(filePath, user.getBytes(), StandardOpenOption.APPEND);
+
+            try (BufferedWriter writer = Files.newBufferedWriter(filePath, StandardOpenOption.CREATE, StandardOpenOption.APPEND)) {
+                if (!content.isEmpty() && !content.endsWith(System.lineSeparator())) {
+                    writer.newLine(); // Добавляем новую строку перед добавлением нового пользователя
+                }
+                writer.write(user);
+            }
         }
     }
 
@@ -76,6 +83,9 @@ public class RegistrationManager {
 
         String userDetail = name + "_" + surname;
         List<String> allUsers = Files.readAllLines(serverFilePath);
-        return allUsers.contains(userDetail);
+
+        return allUsers.stream()
+                .map(s -> s.replaceAll("[^a-zA-Z0-9_]", "").trim()) // Удаляем все, кроме букв, цифр и подчёркиваний
+                .anyMatch(s -> s.equalsIgnoreCase(userDetail));
     }
 }

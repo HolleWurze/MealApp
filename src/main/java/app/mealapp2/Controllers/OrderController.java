@@ -126,7 +126,7 @@ public class OrderController {
         StyleUtil.styleAllButton(deleteOrderButton, "Delete Order", "❌", 20);
         StyleUtil.styleAllButton(addToFavoritesButton, "Add to Favorites", "➕", 20);
         StyleUtil.styleAllButton(showFavoritesButton, "Show Favorites", "\uD83D\uDD0D", 20);
-        StyleUtil.styleAllButton(deleteFavoritesButton, "Delete Favorites", "\uD83D\uDDD1", 20);
+        StyleUtil.styleAllButton(deleteFavoritesButton, "Delete Favorite", "\uD83D\uDDD1", 20);
         StyleUtil.styleAllButton(confirmChangesButton, "Confirm Changes", "✅", 14);
         StyleUtil.styleAllButton(goToMainMenuButton, "Back to Main Menu", "\uD83D\uDD19", 14);
     }
@@ -213,6 +213,7 @@ public class OrderController {
                         alertConfirm.setHeaderText("Your favorite has been upload");
                         alertConfirm.setContentText("Now all you have to do is - click the \"Place Order\" button!");
                         alertConfirm.showAndWait();
+                        favoritesTableView.setVisible(false);
                     }
                 }
             }
@@ -247,6 +248,7 @@ public class OrderController {
                         } catch (IOException e) {
                             throw new RuntimeException(e);
                         }
+                        favoritesTableView.setVisible(false);
                     }
                 }
             }
@@ -300,8 +302,17 @@ public class OrderController {
 
         //boolean isCateringValueEmpty = (cateringValue == null || cateringValue.isEmpty());
 
+        if (cateringChoiceBox.getValue() == null || cateringChoiceBox.getValue().isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Warning");
+            alert.setHeaderText("Empty Catering!");
+            alert.setContentText("You forgot to choose catering!");
+            alert.showAndWait();
+            return;
+        }
+
         if (mainDishValue.isEmpty() && sideDishValue.isEmpty()
-                && saladsValue.isEmpty() && additionValue.isEmpty() && waterValue.isEmpty()) { //isCateringValueEmpty &&
+                && saladsValue.isEmpty() && additionValue.isEmpty() && waterValue.isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Warning");
             alert.setHeaderText("Empty Input");
@@ -462,7 +473,6 @@ public class OrderController {
         Parent root = FXMLLoader.load(getClass().getResource("/Start.fxml"));
         Scene scene = new Scene(root);
         Stage stage = (Stage) goToMainMenuButton.getScene().getWindow();
-        stage.setMaximized(true);
         stage.setScene(scene);
         stage.show();
     }

@@ -57,7 +57,6 @@ public class RegistrationController {
         }
 
         Stage stage = (Stage) nameField.getScene().getWindow();
-        stage.setMaximized(true);
         stage.setScene(new Scene(root));
     }
 
