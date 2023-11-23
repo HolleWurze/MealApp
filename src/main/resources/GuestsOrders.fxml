@@ -38,8 +38,8 @@
 
         <HBox spacing="10">
             <Label text="Add individual orders:"/>
-            <Button text="+" onAction="#addRow"/>
-            <Button text="-" onAction="#deleteSelectedRow"/>
+            <Button text="+" onAction="#addRow" prefWidth="30" style="-fx-font-weight: bold;"/>
+            <Button text="-" onAction="#deleteSelectedRow" prefWidth="30" style="-fx-font-weight: bold;"/>
         </HBox>
 
         <TableView fx:id="mealTable" VBox.vgrow="ALWAYS" editable="true">

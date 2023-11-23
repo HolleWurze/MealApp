@@ -15,16 +15,16 @@
 
     <!-- Center section with inputs and buttons -->
     <center>
-        <VBox spacing="10" prefHeight="200">
-            <HBox spacing="10" alignment="CENTER">
-                <Label text=": קיטרינג"/>
-                <ChoiceBox fx:id="cateringChoiceBox" prefWidth="150"/>
-                <TextField fx:id="mainDish" promptText="עיקריות" prefWidth="150" prefHeight="150"/>
-                <TextField fx:id="sideDish" promptText="תוספות" prefWidth="150" prefHeight="150"/>
-                <TextField fx:id="salads" promptText="סלטים" prefWidth="150" prefHeight="150"/>
-                <TextField fx:id="water" promptText="שתיה" prefWidth="150" prefHeight="150"/>
-                <TextField fx:id="addition" promptText="הערות" prefWidth="150" prefHeight="150"/>
-                <CheckBox fx:id="cibusCheckBox" text="נא לסמן אם ברשותך סיבוס"/>
+        <VBox spacing="10" style="-fx-padding: 20 0 0 0;">
+            <HBox spacing="10" alignment="CENTER" prefHeight="250">
+                <Label text=": קיטרינג" style="-fx-font-weight: bold; -fx-font-size: 16;"/>
+                <ChoiceBox fx:id="cateringChoiceBox" minHeight="45" style="-fx-font-weight: bold; -fx-font-size: 16;"/>
+                <TextField fx:id="mainDish" promptText="עיקריות" prefWidth="150" minHeight="45" style="-fx-font-weight: bold; -fx-font-size: 16;"/>
+                <TextField fx:id="sideDish" promptText="תוספות" prefWidth="150" minHeight="45" style="-fx-font-weight: bold; -fx-font-size: 16;"/>
+                <TextField fx:id="salads" promptText="סלטים" prefWidth="150" minHeight="45" style="-fx-font-weight: bold; -fx-font-size: 16;"/>
+                <TextField fx:id="water" promptText="שתיה" prefWidth="150" minHeight="45" style="-fx-font-weight: bold; -fx-font-size: 16;"/>
+                <TextField fx:id="addition" promptText="הערות" prefWidth="150" minHeight="45" style="-fx-font-weight: bold; -fx-font-size: 16;"/>
+                <CheckBox fx:id="cibusCheckBox" text="נא לסמן אם ברשותך סיבוס" style="-fx-font-weight: bold; -fx-font-size: 16;"/>
             </HBox>
 
             <HBox spacing="10" alignment="CENTER" style="-fx-padding: 0 0 0 100;">
@@ -37,7 +37,7 @@
                 <Button fx:id="confirmChangesButton" onAction="#confirmChanges" visible="false" prefHeight="150"/>
             </HBox>
 
-            <TableView fx:id="favoritesTableView" prefWidth="150">
+            <TableView fx:id="favoritesTableView" minHeight="250">
                 <columns>
                     <TableColumn fx:id="cateringColumn" text="קיטרינג"/>
                     <TableColumn fx:id="mainDishColumn" text="עיקריות"/>
@@ -53,7 +53,7 @@
 
     <!-- Bottom section with the label and button -->
     <bottom>
-        <VBox spacing="10" prefHeight="200">
+        <VBox spacing="10" prefHeight="200" style="-fx-padding: 0 0 0 10;">
             <Label fx:id="infoLabel"/>
             <Button fx:id="goToMainMenuButton" onAction="#goToMainMenu"/>
         </VBox>

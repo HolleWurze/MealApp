@@ -287,7 +287,6 @@ public class AdminScreenController {
         Parent root = FXMLLoader.load(getClass().getResource("/Start.fxml"));
         Scene scene = new Scene(root);
         Stage stage = (Stage) goToMainMenuButton.getScene().getWindow();
-        stage.setMaximized(true);
         stage.setScene(scene);
         stage.show();
     }

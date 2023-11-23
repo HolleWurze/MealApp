@@ -126,7 +126,7 @@ public class OrderController {
         StyleUtil.styleAllButton(deleteOrderButton, "Delete Order", "❌", 20);
         StyleUtil.styleAllButton(addToFavoritesButton, "Add to Favorites", "➕", 20);
         StyleUtil.styleAllButton(showFavoritesButton, "Show Favorites", "\uD83D\uDD0D", 20);
-        StyleUtil.styleAllButton(deleteFavoritesButton, "Delete Favorites", "\uD83D\uDDD1", 20);
+        StyleUtil.styleAllButton(deleteFavoritesButton, "Delete Favorite", "\uD83D\uDDD1", 20);
         StyleUtil.styleAllButton(confirmChangesButton, "Confirm Changes", "✅", 14);
         StyleUtil.styleAllButton(goToMainMenuButton, "Back to Main Menu", "\uD83D\uDD19", 14);
     }
@@ -213,6 +213,7 @@ public class OrderController {
                         alertConfirm.setHeaderText("Your favorite has been upload");
                         alertConfirm.setContentText("Now all you have to do is - click the \"Place Order\" button!");
                         alertConfirm.showAndWait();
+                        favoritesTableView.setVisible(false);
                     }
                 }
             }
@@ -247,6 +248,7 @@ public class OrderController {
                         } catch (IOException e) {
                             throw new RuntimeException(e);
                         }
+                        favoritesTableView.setVisible(false);
                     }
                 }
             }
@@ -289,6 +291,23 @@ public class OrderController {
         }
     }
 
+    private boolean isHebrew(String text) {
+        for (char c : text.toCharArray()) {
+            if ((c >= 0x0590 && c <= 0x05FF) || (c >= 0xFB1D && c <= 0xFB4F)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private String formatText(String text) {
+        if (isHebrew(text)) {
+            return "\u200F" + text; // Добавляем символ RTL
+        } else {
+            return text;
+        }
+    }
+
     @FXML
     public void placeOrder() {
         String cateringValue = cateringChoiceBox.getValue();
@@ -300,8 +319,17 @@ public class OrderController {
 
         //boolean isCateringValueEmpty = (cateringValue == null || cateringValue.isEmpty());
 
+        if (cateringChoiceBox.getValue() == null || cateringChoiceBox.getValue().isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Warning");
+            alert.setHeaderText("Empty Catering!");
+            alert.setContentText("You forgot to choose catering!");
+            alert.showAndWait();
+            return;
+        }
+
         if (mainDishValue.isEmpty() && sideDishValue.isEmpty()
-                && saladsValue.isEmpty() && additionValue.isEmpty() && waterValue.isEmpty()) { //isCateringValueEmpty &&
+                && saladsValue.isEmpty() && additionValue.isEmpty() && waterValue.isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Warning");
             alert.setHeaderText("Empty Input");
@@ -310,7 +338,15 @@ public class OrderController {
             return;
         }
 
-        Meal cateringMeal = new Meal(cateringValue, mainDishValue, sideDishValue, saladsValue, waterValue, additionValue, cibusCheckBox.isSelected());
+        Meal cateringMeal = new Meal(
+                formatText(cateringValue),
+                formatText(mainDishValue),
+                formatText(sideDishValue),
+                formatText(saladsValue),
+                formatText(waterValue),
+                formatText(additionValue),
+                cibusCheckBox.isSelected()
+        );
 
         Order order = new Order(user.getName(), user.getSurname(), cateringMeal);
 
@@ -344,12 +380,12 @@ public class OrderController {
 
                 Meal mealFromFile = orderFromFile.getMeal();
 
-                cateringChoiceBox.setValue(mealFromFile.getCatering());
-                mainDish.setText(mealFromFile.getMainDish());
-                sideDish.setText(mealFromFile.getSideDish());
-                salads.setText(mealFromFile.getSalads());
-                addition.setText(mealFromFile.getAddition());
-                water.setText(mealFromFile.getWater());
+                cateringChoiceBox.setValue(formatText(mealFromFile.getCatering()));
+                mainDish.setText(formatText(mealFromFile.getMainDish()));
+                sideDish.setText(formatText(mealFromFile.getSideDish()));
+                salads.setText(formatText(mealFromFile.getSalads()));
+                addition.setText(formatText(mealFromFile.getAddition()));
+                water.setText(formatText(mealFromFile.getWater()));
                 cibusCheckBox.setSelected(mealFromFile.getCibus());
 
                 confirmChangesButton.setVisible(true);
@@ -420,13 +456,16 @@ public class OrderController {
             try (BufferedWriter writer = Files.newBufferedWriter(orderFilePath)) {
                 writer.write(user.getName() + "," + user.getSurname());
                 writer.newLine();
-                writer.write(cateringChoiceBox.getValue() + "#"
-                        + mainDish.getText() + "#"
-                        + sideDish.getText() + "#"
-                        + salads.getText() + "#"
-                        + addition.getText() + "#"
-                        + water.getText() + "#"
-                        + (cibusCheckBox.isSelected() ? "YES" : "NO"));
+
+                String formattedCatering = formatText(cateringChoiceBox.getValue());
+                String formattedMainDish = formatText(mainDish.getText());
+                String formattedSideDish = formatText(sideDish.getText());
+                String formattedSalads = formatText(salads.getText());
+                String formattedAddition = formatText(addition.getText());
+                String formattedWater = formatText(water.getText());
+                String formattedCibus = cibusCheckBox.isSelected() ? "YES" : "NO";
+
+                writer.write(String.join("#", formattedCatering, formattedMainDish, formattedSideDish, formattedSalads, formattedWater, formattedAddition, formattedCibus));
 
                 confirmChangesButton.setVisible(false);
                 showAlert("Success", "Your order has been successfully updated");
@@ -462,7 +501,6 @@ public class OrderController {
         Parent root = FXMLLoader.load(getClass().getResource("/Start.fxml"));
         Scene scene = new Scene(root);
         Stage stage = (Stage) goToMainMenuButton.getScene().getWindow();
-        stage.setMaximized(true);
         stage.setScene(scene);
         stage.show();
     }

@@ -137,7 +137,8 @@ public class StyleUtil {
                         "-fx-padding: 7px; " +
                         "-fx-min-width: 150px; " +
                         "-fx-border-radius: 2px; " +
-                        "-fx-cursor: hand;"
+                        "-fx-cursor: hand;" +
+                        "-fx-font-weight: bold;"
         );
 
         button.setOnMouseEntered(e -> button.setStyle(
@@ -148,7 +149,8 @@ public class StyleUtil {
                         "-fx-padding: 7px; " +
                         "-fx-min-width: 150px; " +
                         "-fx-border-radius: 2px; " +
-                        "-fx-cursor: hand;"
+                        "-fx-cursor: hand;" +
+                        "-fx-font-weight: bold;"
         ));
 
         button.setOnMouseExited(e -> button.setStyle(
@@ -159,7 +161,8 @@ public class StyleUtil {
                         "-fx-padding: 7px; " +
                         "-fx-min-width: 150px; " +
                         "-fx-border-radius: 2px; " +
-                        "-fx-cursor: hand;"
+                        "-fx-cursor: hand;" +
+                        "-fx-font-weight: bold;"
         ));
 
         Label textLabel = new Label(buttonText);

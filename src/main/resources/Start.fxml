@@ -4,6 +4,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Label?>
 <BorderPane xmlns:fx="http://javafx.com/fxml/1"
             xmlns="http://javafx.com/javafx/11.0.1" fx:controller="app.mealapp2.Controllers.StartController" prefHeight="1000" prefWidth="1680">
 
@@ -14,7 +15,11 @@
     </top>
 
     <center>
-        <VBox alignment="CENTER" spacing="10">
+
+        <VBox alignment="CENTER" spacing="50" style="-fx-font-weight: bold;">
+            <VBox alignment="CENTER" style="-fx-font-weight: bold; -fx-font-size: 24;">
+                <Label fx:id="infoLabel" style="-fx-text-fill: #0077bb;"/>
+            </VBox>
             <Button fx:id="orderButton" onAction="#openAppropriateScreen" prefWidth="200">
             </Button>
 
