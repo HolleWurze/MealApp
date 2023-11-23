@@ -225,19 +225,35 @@ public class OperatorController {
 //            createCell(row, 7, meal.getCibus() ? "YES" : "NO");
 //        }
 
+//        for (Order order : allOrders) {
+//            Row row = sheet.createRow(rowNum++);
+//            createCell(row, 0, order.getName() + " " + order.getSurname(), workbook);
+//            Meal meal = order.getMeal();
+//
+//            // Создаем ячейки с правильным стилем для каждого значения
+//            createCell(row, 1, meal.getCatering(), workbook);
+//            createCell(row, 2, meal.getMainDish(), workbook);
+//            createCell(row, 3, meal.getSideDish(), workbook);
+//            createCell(row, 4, meal.getSalads(), workbook);
+//            createCell(row, 5, meal.getWater(), workbook);
+//            createCell(row, 6, meal.getAddition(), workbook);
+//            createCell(row, 7, meal.getCibus() ? "YES" : "NO", workbook);
+//        }
+
         for (Order order : allOrders) {
             Row row = sheet.createRow(rowNum++);
-            createCell(row, 0, order.getName() + " " + order.getSurname(), workbook);
-            Meal meal = order.getMeal();
 
-            // Создаем ячейки с правильным стилем для каждого значения
-            createCell(row, 1, meal.getCatering(), workbook);
-            createCell(row, 2, meal.getMainDish(), workbook);
-            createCell(row, 3, meal.getSideDish(), workbook);
-            createCell(row, 4, meal.getSalads(), workbook);
-            createCell(row, 5, meal.getWater(), workbook);
-            createCell(row, 6, meal.getAddition(), workbook);
-            createCell(row, 7, meal.getCibus() ? "YES" : "NO", workbook);
+            // Создаем ячейки для каждого элемента заказа отдельно
+            int cellIndex = 0;
+            createCell(workbook, row, cellIndex++, order.getName() + " " + order.getSurname());
+            Meal meal = order.getMeal();
+            createCell(workbook, row, cellIndex++, formatText(meal.getCatering()));
+            createCell(workbook, row, cellIndex++, formatText(meal.getMainDish()));
+            createCell(workbook, row, cellIndex++, formatText(meal.getSideDish()));
+            createCell(workbook, row, cellIndex++, formatText(meal.getSalads()));
+            createCell(workbook, row, cellIndex++, formatText(meal.getWater()));
+            createCell(workbook, row, cellIndex++, formatText(meal.getAddition()));
+            createCell(workbook, row, cellIndex, formatText(meal.getCibus() ? "YES" : "NO"));
         }
 
         String filePath = Constants.SERVER_FOLDER_PATH + "\\Reports" + "/orders_" + LocalDate.now() + ".xlsx";
@@ -260,12 +276,20 @@ public class OperatorController {
         }
     }
 
+    private String formatText(String text) {
+        if (isHebrew(text)) {
+            return "\u200F" + text; // Добавляем RLM для текста на иврите
+        } else {
+            return "\u200E" + text; // Добавляем LRM для текста на английском или русском
+        }
+    }
+
 //    private void createCell(Row row, int columnCount, String value) {
 //        Cell cell = row.createCell(columnCount);
 //        cell.setCellValue(value);
 //    }
 
-    private void createCell(Row row, int column, String value, XSSFWorkbook workbook) {
+    private void createCell(XSSFWorkbook workbook, Row row, int column, String value) {
         Cell cell = row.createCell(column);
         cell.setCellValue(value);
 
