@@ -1,8 +1,11 @@
 package app.mealapp2;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.*;
 
+import com.dustinredmond.fxtrayicon.FXTrayIcon;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -10,6 +13,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import lombok.extern.log4j.Log4j2;
+import org.apache.logging.log4j.message.Message;
 
 import java.net.URL;
 import java.util.*;
@@ -17,7 +21,7 @@ import java.util.concurrent.TimeUnit;
 
 @Log4j2
 public class App extends Application {
-    private TrayIcon trayIcon;
+    private FXTrayIcon trayIcon;
     private PopupMenu popup;
     private MenuItem openItem;
     private MenuItem closeItem;
@@ -31,63 +35,31 @@ public class App extends Application {
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
 
-        prepareTrayIcon(primaryStage);
-        primaryStage.show();
+        FXTrayIcon trayIcon = new FXTrayIcon(primaryStage, getClass().getResource("/ico.png"));
+        trayIcon.show();
+
+        javafx.scene.control.MenuItem openItem = new javafx.scene.control.MenuItem("Open");
+        openItem.setOnAction(e -> primaryStage.show());
+        trayIcon.addMenuItem(openItem);
+
+        javafx.scene.control.MenuItem closeItem = new javafx.scene.control.MenuItem("Close");
+        closeItem.setOnAction(e -> {
+            Platform.exit();
+            System.exit(0);
+        });
+        trayIcon.addMenuItem(closeItem);
 
         primaryStage.setOnCloseRequest(event -> {
-            System.out.println("Closing window requested");
             event.consume();
             primaryStage.hide();
         });
 
-        scheduleNotifications();
+        primaryStage.show();
+
+        scheduleNotifications(trayIcon);
     }
 
-    private void prepareTrayIcon(Stage primaryStage) {
-        if (SystemTray.isSupported()) {
-            tray = SystemTray.getSystemTray();
-            Toolkit toolkit = Toolkit.getDefaultToolkit();
-
-            if (trayIcon == null) {
-                URL imageUrl = App.class.getResource("/ico.gif");
-                Image image = toolkit.getImage(imageUrl);
-                trayIcon = new TrayIcon(image, "MealApp");
-                trayIcon.setImageAutoSize(true);
-                popup = new PopupMenu();
-                createMenuItems(primaryStage);
-                trayIcon.setPopupMenu(popup);
-
-                try {
-                    tray.add(trayIcon);
-                } catch (AWTException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-
-    private void createMenuItems(Stage primaryStage) {
-        openItem = new MenuItem("Open");
-        openItem.addActionListener(event -> Platform.runLater(() -> {
-            if (!primaryStage.isShowing()) {
-                primaryStage.show();
-                primaryStage.toFront();
-            }
-        }));
-
-        closeItem = new MenuItem("Close");
-        closeItem.addActionListener(event -> {
-            Platform.exit();
-            tray.remove(trayIcon);
-            System.exit(0);
-        });
-
-        popup.add(openItem);
-        popup.addSeparator();
-        popup.add(closeItem);
-    }
-
-    private void scheduleNotifications() {
+    private void scheduleNotifications(FXTrayIcon trayIcon) {
         Timer timer = new Timer();
         TimerTask dailyTask = new TimerTask() {
             @Override
@@ -96,7 +68,7 @@ public class App extends Application {
                 int dayOfWeek = now.get(Calendar.DAY_OF_WEEK);
                 if (dayOfWeek >= Calendar.SUNDAY && dayOfWeek <= Calendar.FRIDAY) {
                     if (SystemTray.isSupported()) {
-                        trayIcon.displayMessage("MealApp Reminder", "Good morning!\nHave a good day!\nDon't forget to order food!", TrayIcon.MessageType.INFO);
+                        trayIcon.showInfoMessage("MealApp Reminder", "Good morning!\nHave a good day!\nDon't forget to order food!");
                     }
                 }
             }
