@@ -15,27 +15,42 @@ import javafx.stage.Stage;
 import lombok.extern.log4j.Log4j2;
 import org.apache.logging.log4j.message.Message;
 
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 @Log4j2
 public class App extends Application {
+    //    private static final String LOCK_FILENAME = "app.lock";
+    private static final int PORT = 12345;
+    private static ServerSocket socket;
     private FXTrayIcon trayIcon;
-    private PopupMenu popup;
-    private MenuItem openItem;
-    private MenuItem closeItem;
-    private SystemTray tray;
+    private Stage primaryStage;
 
     @Override
     public void start(Stage primaryStage) throws IOException {
+        this.primaryStage = primaryStage;
+//        String installationDirectory = "C:\\MealApp";
+//        Path lockFilePath = Paths.get(installationDirectory, LOCK_FILENAME);
+//
+//        if (!Files.exists(lockFilePath)) {
+//            setupPrimaryStage(primaryStage);
+//            Files.createFile(lockFilePath);
+//            lockFilePath.toFile().deleteOnExit();
+//        }
+
         primaryStage.setTitle("Meal Ordering App");
         FXMLLoader startLoader = new FXMLLoader(getClass().getResource("/Start.fxml"));
         Parent root = startLoader.load();
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
 
-        FXTrayIcon trayIcon = new FXTrayIcon(primaryStage, getClass().getResource("/ico.png"));
+        trayIcon = new FXTrayIcon(primaryStage, getClass().getResource("/ico.png"));
         trayIcon.show();
 
         javafx.scene.control.MenuItem openItem = new javafx.scene.control.MenuItem("Open");
@@ -49,14 +64,24 @@ public class App extends Application {
         });
         trayIcon.addMenuItem(closeItem);
 
-        primaryStage.setOnCloseRequest(event -> {
-            event.consume();
-            primaryStage.hide();
-        });
-
-        primaryStage.show();
+        primaryStage.setOnCloseRequest(event -> primaryStage.hide());
 
         scheduleNotifications(trayIcon);
+
+        new Thread(this::startSocketListener).start();
+    }
+
+    private void startSocketListener() {
+        while (true) {
+            try (Socket serverSocket = socket.accept()) {
+                Platform.runLater(() -> {
+                    primaryStage.show();
+                    primaryStage.toFront();
+                });
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private void scheduleNotifications(FXTrayIcon trayIcon) {
@@ -84,6 +109,18 @@ public class App extends Application {
     }
 
     public static void main(String[] args) {
+        try {
+            socket = new ServerSocket(PORT);
+            launch(args);
+        } catch (IOException e) {
+            System.out.println("Приложение уже запущено. Посылаем запрос на активацию.");
+            try (Socket clientSocket = new Socket("localhost", PORT)) {
+                clientSocket.getOutputStream().write("ACTIVATE".getBytes());
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+
         String directoryPath = "C:\\MealApp";
         File directory = new File(directoryPath);
 
@@ -102,8 +139,6 @@ public class App extends Application {
         } catch (IOException e) {
             log.error("Failed to copy config files", e);
         }
-
-        launch(args);
     }
 
     private static void copyConfigFiles(String directoryPath) throws IOException {
@@ -146,4 +181,3 @@ public class App extends Application {
         }
     }
 }
-
