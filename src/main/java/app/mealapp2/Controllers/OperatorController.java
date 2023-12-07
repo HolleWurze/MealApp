@@ -68,6 +68,8 @@ public class OperatorController {
     private Button checkOrdersButton;
     @FXML
     private Label quantityOrdersToday;
+    @FXML
+    public Label DateTimeToday;
 
     public OperatorController() {
         operatorManager = new OperatorManager();
@@ -118,6 +120,8 @@ public class OperatorController {
         }
         quantityOrdersToday.setText("Quantity of orders for today: " + ordersTable.getItems().size());
         quantityOrdersToday.setVisible(true);
+        String DateTime = LocalDate.now().toString();
+        DateTimeToday.setText(DateTime);
     }
 
     @FXML
@@ -202,43 +206,21 @@ public class OperatorController {
         String date = LocalDate.now().toString();
         XSSFSheet sheet = workbook.createSheet("Orders_" + date);
 
-        String[] headers = new String[]{"Name", "Catering", "Main Dish", "Side Dish", "Salads", "Drink", "Comment", "Cibus"};
+        String dateTime = LocalDate.now().toString();
         Row headerRow = sheet.createRow(0);
+        Cell dateTimeCell = headerRow.createCell(0);
+        dateTimeCell.setCellValue(dateTime);
+
+        String[] headers = new String[]{"Name", "Catering", "Main Dish", "Side Dish", "Salads", "Drink", "Comment", "Cibus"};
+        Row secondRow = sheet.createRow(1);
+
         for (int i = 0; i < headers.length; i++) {
-            Cell cell = headerRow.createCell(i);
+            sheet.autoSizeColumn(i);
+            Cell cell = secondRow.createCell(i);
             cell.setCellValue(headers[i]);
         }
 
-        int rowNum = 1;
-//        for (Order order : allOrders) {
-//            Row row = sheet.createRow(rowNum++);
-//            createCell(row, 0, order.getName() + " " + order.getSurname());
-//
-//            Meal meal = order.getMeal(); // Получаем блюдо напрямую из заказа
-//
-//            createCell(row, 1, meal.getCatering());
-//            createCell(row, 2, meal.getMainDish());
-//            createCell(row, 3, meal.getSideDish());
-//            createCell(row, 4, meal.getSalads());
-//            createCell(row, 6, meal.getWater());
-//            createCell(row, 5, meal.getAddition());
-//            createCell(row, 7, meal.getCibus() ? "YES" : "NO");
-//        }
-
-//        for (Order order : allOrders) {
-//            Row row = sheet.createRow(rowNum++);
-//            createCell(row, 0, order.getName() + " " + order.getSurname(), workbook);
-//            Meal meal = order.getMeal();
-//
-//            // Создаем ячейки с правильным стилем для каждого значения
-//            createCell(row, 1, meal.getCatering(), workbook);
-//            createCell(row, 2, meal.getMainDish(), workbook);
-//            createCell(row, 3, meal.getSideDish(), workbook);
-//            createCell(row, 4, meal.getSalads(), workbook);
-//            createCell(row, 5, meal.getWater(), workbook);
-//            createCell(row, 6, meal.getAddition(), workbook);
-//            createCell(row, 7, meal.getCibus() ? "YES" : "NO", workbook);
-//        }
+        int rowNum = 2;
 
         for (Order order : allOrders) {
             Row row = sheet.createRow(rowNum++);
@@ -284,16 +266,10 @@ public class OperatorController {
         }
     }
 
-//    private void createCell(Row row, int columnCount, String value) {
-//        Cell cell = row.createCell(columnCount);
-//        cell.setCellValue(value);
-//    }
-
     private void createCell(XSSFWorkbook workbook, Row row, int column, String value) {
         Cell cell = row.createCell(column);
         cell.setCellValue(value);
 
-        // Применяем стиль в зависимости от языка
         if (isHebrew(value)) {
             cell.setCellStyle(getHebrewCellStyle(workbook));
         } else {

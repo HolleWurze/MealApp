@@ -18,7 +18,7 @@
         <VBox spacing="10" style="-fx-padding: 20 0 0 0;">
             <HBox spacing="10" alignment="CENTER" prefHeight="250">
                 <Label text=": קיטרינג" style="-fx-font-weight: bold; -fx-font-size: 16;"/>
-                <ChoiceBox fx:id="cateringChoiceBox" minHeight="45" style="-fx-font-weight: bold; -fx-font-size: 16;"/>
+                <ChoiceBox fx:id="cateringChoiceBox" prefWidth="150" minHeight="45" style="-fx-font-weight: bold; -fx-font-size: 16;"/>
                 <TextField fx:id="mainDish" promptText="עיקריות" prefWidth="150" minHeight="45" style="-fx-font-weight: bold; -fx-font-size: 16;"/>
                 <TextField fx:id="sideDish" promptText="תוספות" prefWidth="150" minHeight="45" style="-fx-font-weight: bold; -fx-font-size: 16;"/>
                 <TextField fx:id="salads" promptText="סלטים" prefWidth="150" minHeight="45" style="-fx-font-weight: bold; -fx-font-size: 16;"/>
