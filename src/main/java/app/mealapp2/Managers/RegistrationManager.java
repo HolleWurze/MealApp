@@ -68,7 +68,7 @@ public class RegistrationManager {
 
             try (BufferedWriter writer = Files.newBufferedWriter(filePath, StandardOpenOption.CREATE, StandardOpenOption.APPEND)) {
                 if (!content.isEmpty() && !content.endsWith(System.lineSeparator())) {
-                    writer.newLine(); // Добавляем новую строку перед добавлением нового пользователя
+                    writer.newLine();
                 }
                 writer.write(user);
             }
@@ -85,7 +85,7 @@ public class RegistrationManager {
         List<String> allUsers = Files.readAllLines(serverFilePath);
 
         return allUsers.stream()
-                .map(s -> s.replaceAll("[^a-zA-Z0-9_]", "").trim()) // Удаляем все, кроме букв, цифр и подчёркиваний
+                .map(s -> s.replaceAll("[^\\p{L}0-9_]", "").trim())
                 .anyMatch(s -> s.equalsIgnoreCase(userDetail));
     }
 }

@@ -119,6 +119,7 @@ public class App extends Application {
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
+            System.exit(0);
         }
 
         String directoryPath = "C:\\MealApp";
